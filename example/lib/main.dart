@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 //    String text = 'first*bold*.';
-    String text = 'first*_bold_*.';
+    String text = r'first*\_bold\_*.';
     return new MaterialApp(
       home: Scaffold(
           backgroundColor: Colors.grey,

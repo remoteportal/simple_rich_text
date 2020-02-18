@@ -38,21 +38,32 @@ class EasyRichText extends StatelessWidget {
 
       Set set = Set();
 
-      void toggle(String m) {
-        if (set.contains(m)) {
-          print("REM: $m");
-          set.remove(m);
-        } else {
-          print("ADD: $m");
-          set.add(m);
-        }
-      }
-
       // parse into array
-      List<String> spanList = text.split(RegExp(r"[*~_]"));
+      List<String> spanList = text.split(RegExp(r"[*~_\\]"));
       print("len=${spanList.length}: $spanList");
 
       int i = 0;
+      bool acceptNext = true;
+
+      void toggle(String m) {
+        if (m == r'\') {
+          print("quote: i=$i: ${text.substring(i + 1, i + 2)}");
+          acceptNext = false;
+        } else {
+          if (acceptNext) {
+            if (set.contains(m)) {
+              print("REM: $m");
+              set.remove(m);
+            } else {
+              print("ADD: $m");
+              set.add(m);
+            }
+          }
+
+          acceptNext = true;
+        }
+      }
+
       for (var v in spanList) {
         if (v.isEmpty) {
           String m = text.substring(i, i + 1);
@@ -65,7 +76,7 @@ class EasyRichText extends StatelessWidget {
           TextStyle ts = TextStyle(
               fontWeight:
                   set.contains('*') ? FontWeight.bold : FontWeight.normal,
-              decoration: set.contains('*')
+              decoration: set.contains('_')
                   ? TextDecoration.underline
                   : TextDecoration.none);
           children
