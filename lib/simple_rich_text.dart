@@ -13,12 +13,13 @@ class SimpleRichText extends StatelessWidget {
     this.chars,
     this.context,
     this.fussy,
-    this.textStyle = const TextStyle(
-      color: Colors.black,
-    ),
-    this.textStyleHighlight = const TextStyle(
-      color: Colors.red,
-    ),
+    this.style = const TextStyle(),
+//    this.style = const TextStyle(
+//      color: Colors.black,
+//    ),
+//    this.textStyleHighlight = const TextStyle(
+//      color: Colors.red,
+//    ),
   });
 
 //  final int clsInst = ++clsInst;
@@ -34,10 +35,10 @@ class SimpleRichText extends StatelessWidget {
   final BuildContext context;
 
   /// The {TextStyle} of the {SimpleRichText.text} that isn't highlighted.
-  final TextStyle textStyle;
+  final TextStyle style;
 
   /// The {TextStyle} of the {SimpleRichText.term}s found.
-  final TextStyle textStyleHighlight;
+//  final TextStyle textStyleHighlight;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +66,18 @@ class SimpleRichText extends StatelessWidget {
 
         void wrap(String v) {
           //print("wrap: $v set=$set");
-          TextStyle ts = TextStyle(
+//          TextStyle xxx = textStyle.;
+
+//          TextStyle ts = TextStyle(
+//              decoration: set.contains('_')
+//                  ? TextDecoration.underline
+//                  : TextDecoration.none,
+//              fontStyle:
+//                  set.contains('/') ? FontStyle.italic : FontStyle.normal,
+//              fontWeight:
+//                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
+
+          TextStyle ts = style.copyWith(
               decoration: set.contains('_')
                   ? TextDecoration.underline
                   : TextDecoration.none,
@@ -73,6 +85,7 @@ class SimpleRichText extends StatelessWidget {
                   set.contains('/') ? FontStyle.italic : FontStyle.normal,
               fontWeight:
                   set.contains('*') ? FontWeight.bold : FontWeight.normal);
+
 //        TextSpan span = TextSpan(text: v, style: ts);
           if (route != null) {
 //            print("[$clsInst] route=$route");
@@ -101,7 +114,6 @@ class SimpleRichText extends StatelessWidget {
             //ISSUE: need each onTap to remember state at that point
             children.add(TextSpan(
                 text: v,
-//              text: 'TAP',
                 // Beware!  This class is only safe because the TapGestureRecognizer is not given a deadline and therefore never allocates any resources.
                 // In any other situation -- setting a deadline, using any of the less trivial recognizers, etc -- you would have to manage the gesture recognizer's lifetime
                 // and call dispose() when the TextSpan was no longer being rendered.
@@ -109,30 +121,6 @@ class SimpleRichText extends StatelessWidget {
                 // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
                 recognizer: TapGestureRecognizer()..onTap = onTapNew(v, route),
                 style: ts));
-
-//            //ISSUE: need each onTap to remember state at that point
-//            children.add(TextSpan(
-//                text: v,
-////              text: 'TAP',
-//                // Beware!  This class is only safe because the TapGestureRecognizer is not given a deadline and therefore never allocates any resources.
-//                // In any other situation -- setting a deadline, using any of the less trivial recognizers, etc -- you would have to manage the gesture recognizer's lifetime
-//                // and call dispose() when the TextSpan was no longer being rendered.
-//                // Since TextSpan itself is @immutable, this means that you would have to manage the recognizer from outside
-//                // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
-//                recognizer: TapGestureRecognizer()
-//                  ..onTap = () {
-//                    print("[$clsInst] TAP: $v => /$route");
-//                    assert(context != null,
-//                        'must pass context if using route links');
-//                    if (route == null) {
-//                      print("[$clsInst] ROUTE IS NULL");
-//                    } else {
-//                      Navigator.pushNamed(context, '/$route');
-//                      route = null;
-//                    }
-//                  },
-//                style: ts));
-
           } else {
 //          children.add(span);
             children.add(TextSpan(text: v, style: ts));
@@ -201,30 +189,3 @@ class SimpleRichText extends StatelessWidget {
     }
   }
 }
-
-//  Widget build(BuildContext context) {
-//    if (term.isEmpty) {
-//      return Text(text, style: textStyle);
-//    } else {
-//      String termLC = term.toLowerCase();
-//
-//      List<InlineSpan> children = [];
-//      List<String> spanList = text.toLowerCase().split(termLC);
-//      int i = 0;
-//      for (var v in spanList) {
-//        if (v.isNotEmpty) {
-//          children.add(TextSpan(
-//              text: text.substring(i, i + v.length), style: textStyle));
-//          i += v.length;
-//        }
-//        if (i < text.length) {
-//          children.add(TextSpan(
-//              text: text.substring(i, i + term.length),
-//              style: textStyleHighlight));
-//          i += term.length;
-//        }
-//      }
-//      return RichText(text: TextSpan(children: children));
-//    }
-//  }
-//}

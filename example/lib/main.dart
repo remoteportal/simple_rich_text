@@ -1,5 +1,5 @@
-import 'package:simple_rich_text/simple_rich_text.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,9 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           backgroundColor: Colors.grey,
           // , chars: r"[*]"
-          body: Center(child: SimpleRichText(text: text))),
+          body: Center(
+              child: SimpleRichText(
+                  text: text, style: TextStyle(color: Colors.yellow)))),
     );
   }
 }
