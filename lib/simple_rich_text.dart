@@ -4,6 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+int INST = -1;
+
 /// Widget that renders a string with sub-string highlighting.
 class SimpleRichText extends StatelessWidget {
   SimpleRichText({
@@ -17,7 +19,11 @@ class SimpleRichText extends StatelessWidget {
     this.textStyleHighlight = const TextStyle(
       color: Colors.red,
     ),
-  });
+  }) {
+    inst = ++INST;
+  }
+
+  int inst;
 
   final bool fussy;
 
@@ -71,7 +77,7 @@ class SimpleRichText extends StatelessWidget {
                   set.contains('*') ? FontWeight.bold : FontWeight.normal);
 //        TextSpan span = TextSpan(text: v, style: ts);
           if (route != null) {
-            print("route=$route");
+            print("[$inst] route=$route");
 //          GestureDetector
 //        children.add(WidgetSpan(child: Text('****')));
 //          children.add(WidgetSpan(
@@ -91,11 +97,15 @@ class SimpleRichText extends StatelessWidget {
                 // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    print("TAP: $v => /$route");
+                    print("[$inst] TAP: $v => /$route");
                     assert(context != null,
                         'must pass context if using route links');
-                    Navigator.pushNamed(context, '/$route');
-                    route = null;
+                    if (route == null) {
+                      print("[$inst] ROUTE IS NULL");
+                    } else {
+                      Navigator.pushNamed(context, '/$route');
+                      route = null;
+                    }
                   },
                 style: ts));
           } else {
