@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-int INST = -1;
+//int clsInst = -1;
 
 /// Widget that renders a string with sub-string highlighting.
 class SimpleRichText extends StatelessWidget {
@@ -19,11 +19,9 @@ class SimpleRichText extends StatelessWidget {
     this.textStyleHighlight = const TextStyle(
       color: Colors.red,
     ),
-  }) {
-    inst = ++INST;
-  }
+  });
 
-  int inst;
+//  final int clsInst = ++clsInst;
 
   final bool fussy;
 
@@ -77,7 +75,8 @@ class SimpleRichText extends StatelessWidget {
                   set.contains('*') ? FontWeight.bold : FontWeight.normal);
 //        TextSpan span = TextSpan(text: v, style: ts);
           if (route != null) {
-            print("[$inst] route=$route");
+//            print("[$clsInst] route=$route");
+            print("BBB route=$route");
 //          GestureDetector
 //        children.add(WidgetSpan(child: Text('****')));
 //          children.add(WidgetSpan(
@@ -87,6 +86,19 @@ class SimpleRichText extends StatelessWidget {
 //              //print("TAPPED");
 //            },
 //          )));
+
+            assert(context != null, 'must pass context if using route links');
+
+            onTapNew(String caption, String r) {
+              assert(r != null);
+              return () {
+                print("TAP: $caption => /$r");
+                assert(r != null);
+                Navigator.pushNamed(context, '/$r');
+              };
+            }
+
+            //ISSUE: need each onTap to remember state at that point
             children.add(TextSpan(
                 text: v,
 //              text: 'TAP',
@@ -95,19 +107,32 @@ class SimpleRichText extends StatelessWidget {
                 // and call dispose() when the TextSpan was no longer being rendered.
                 // Since TextSpan itself is @immutable, this means that you would have to manage the recognizer from outside
                 // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    print("[$inst] TAP: $v => /$route");
-                    assert(context != null,
-                        'must pass context if using route links');
-                    if (route == null) {
-                      print("[$inst] ROUTE IS NULL");
-                    } else {
-                      Navigator.pushNamed(context, '/$route');
-                      route = null;
-                    }
-                  },
+                recognizer: TapGestureRecognizer()..onTap = onTapNew(v, route),
                 style: ts));
+
+//            //ISSUE: need each onTap to remember state at that point
+//            children.add(TextSpan(
+//                text: v,
+////              text: 'TAP',
+//                // Beware!  This class is only safe because the TapGestureRecognizer is not given a deadline and therefore never allocates any resources.
+//                // In any other situation -- setting a deadline, using any of the less trivial recognizers, etc -- you would have to manage the gesture recognizer's lifetime
+//                // and call dispose() when the TextSpan was no longer being rendered.
+//                // Since TextSpan itself is @immutable, this means that you would have to manage the recognizer from outside
+//                // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
+//                recognizer: TapGestureRecognizer()
+//                  ..onTap = () {
+//                    print("[$clsInst] TAP: $v => /$route");
+//                    assert(context != null,
+//                        'must pass context if using route links');
+//                    if (route == null) {
+//                      print("[$clsInst] ROUTE IS NULL");
+//                    } else {
+//                      Navigator.pushNamed(context, '/$route');
+//                      route = null;
+//                    }
+//                  },
+//                style: ts));
+
           } else {
 //          children.add(span);
             children.add(TextSpan(text: v, style: ts));
@@ -151,7 +176,7 @@ class SimpleRichText extends StatelessWidget {
               int close = v.indexOf('}');
               if (close > 0) {
                 route = v.substring(1, close);
-                print("route=$route");
+                print("AAA route=$route");
                 v = v.substring(close + 1);
 //                print("remaining: $v");
               }
