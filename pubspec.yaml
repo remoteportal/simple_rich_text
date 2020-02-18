@@ -1,6 +1,6 @@
 name: easy_rich_text
-description: Highlight Flutter text at the character-level for customizable and simple search term highlighting.
-version: 1.0.2        #NOEDIT
+description: Display a Dart string in Flutter using simple rich text characters.
+version: 1.0.3        #NOEDIT
 homepage: https://github.com/remoteportal/easy_rich_text
 
 environment:

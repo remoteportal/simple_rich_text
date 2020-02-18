@@ -10,7 +10,7 @@ void main() {
   // with widgets in the test environment.
   testWidgets('test the thing!', (WidgetTester tester) async {
     await tester.pumpWidget(Directionality(
-        child: EasyRichText(text: 'Peter', term: 't'),
+        child: EasyRichText(text: 'This is *bold*'),
         textDirection: TextDirection.ltr));
   });
 }
