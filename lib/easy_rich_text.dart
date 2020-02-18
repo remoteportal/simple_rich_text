@@ -17,6 +17,8 @@ class EasyRichText extends StatelessWidget {
     ),
   });
 
+  // pass in pattern
+  // pass-through if no matches
   final bool fussy;
 
   /// The String to be displayed using rich text.
@@ -71,10 +73,12 @@ class EasyRichText extends StatelessWidget {
 
       for (var v in spanList) {
         if (v.isEmpty) {
-          String m = text.substring(i, i + 1);
+          if (i < text.length) {
+            String m = text.substring(i, i + 1);
 //          print("e: $m");
-          toggle(m);
-          i++;
+            toggle(m);
+            i++;
+          }
         } else if (v.isNotEmpty) {
           print("wrap: $v ($set)");
 //          print("wrap: ${text.substring(i, i + v.length)}");

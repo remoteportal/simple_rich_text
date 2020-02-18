@@ -11,11 +11,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 //    String text = null;
 //    String text = 'no format characters';
+//    String text = '_entire string_';
+//    String text = '*/_fully loaded!_*/';
 //    String text = 'first*bold*.';
-//    String text = r'first*\_bold\_*.';
+    String text = r'test*\_quoting\_*.';
 //    String text = r'don't*close';
 //    String text = r'_start at beginning';
-    String text = r'Deanna is /awesome/!';
+//    String text = r'/Deanna/ is /awesome/!';
+//    String text = r'_back__to back_';
     return new MaterialApp(
       home: Scaffold(
           backgroundColor: Colors.grey,
