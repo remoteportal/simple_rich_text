@@ -1,5 +1,12 @@
 # easy_rich_text
 
+Easily format Flutter text with simple format characters:
+
+![Screenshot](example.png)
+
+ 
+
+
 # Format Characters
 
 | character      | format effect                |
@@ -10,7 +17,7 @@
 
 
 
-# Examples:
+# Sample Inputs:
 ```
 'this is /italic/'
 

@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       home: Scaffold(
           backgroundColor: Colors.grey,
-          body: Center(child: EasyRichText(text: 'this is *bold*'))),
+          body: Center(child: EasyRichText(text: r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/). _{home}Click to navigate to home screen_'))),
     );
   }
 }
@@ -23,4 +23,4 @@ class MyApp extends StatelessWidget {
 ```
 
 # Output:
-![Screenshot](example3.png)
+![Screenshot](example.png)
