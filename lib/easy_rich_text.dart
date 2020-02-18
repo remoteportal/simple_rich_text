@@ -54,9 +54,10 @@ class EasyRichText extends StatelessWidget {
 
       int i = 0;
       bool acceptNext = true;
+      String route;
 
       void wrap(String v) {
-        print("wrap: $v ($set)");
+        print("wrap: $v set=$set");
         TextStyle ts = TextStyle(
             decoration: set.contains('_')
                 ? TextDecoration.underline
@@ -89,6 +90,7 @@ class EasyRichText extends StatelessWidget {
       }
 
       for (var v in spanList) {
+        print("========== $v ==========");
         if (v.isEmpty) {
           if (i < text.length) {
             String m = text.substring(i, i + 1);
@@ -96,12 +98,25 @@ class EasyRichText extends StatelessWidget {
             toggle(m);
             i++;
           }
-        } else if (v.isNotEmpty) {
+        } else {
+          int adv = v.length;
+          if (v[0] == '{') {
+            print("check $v");
+            int close = v.indexOf('}');
+            if (close > 0) {
+              String param = v.substring(1, close);
+              print("param2=$param");
+              route = param;
+//                  Navigator.pushNamed(context, param);
+              v = v.substring(close + 1);
+              print("remaining: $v");
+            }
+          }
           wrap(v);
-          i += v.length;
+          i += adv;
           if (i < text.length) {
             String m = text.substring(i, i + 1);
-//            print("format: $m");
+            print("*** format: $m");
             toggle(m);
             i++;
           }

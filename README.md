@@ -6,7 +6,9 @@ this is /italic/
 this is *bold*
 this is not \*bold\*
 this is _underline_
-go to _home_(/home) page
+go to _home_{/home} page
+go to _home{/route}_ page
+go to _{/route}home_ page
 this is ~important~(red).
 this is _*bold and underlined*_.
 ```
