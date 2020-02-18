@@ -1,16 +1,32 @@
 # easy_rich_text
 
-# examples
+# Format Characters
+
+| character      | format effect                |
+|-----------|----------------------|
+| asterisk (*)       | bold            |
+| slash (/)       | italicize            |
+| underscore (_)       | underline            |
+
+
+
+# Examples:
 ```
-this is /italic/
-this is *bold*
-this is not \*bold\*
-this is _underline_
-go to _home_{/home} page
-go to _home{/route}_ page
-go to _{/route}home_ page
-this is ~important~(red).
-this is _*bold and underlined*_.
+'this is /italic/'
+
+'this is *bold*'
+
+'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/)'
+
+'you can quote characters to NOT format a word \*bold\*'
+
+'this is _underline_'
+
+'go to _{/myroute}home_ page'
+
+'this is ~important~(red).'
+
+'this is _*bold and underlined*_.'
 ```
 
 
@@ -33,62 +49,12 @@ Add a new dependency line to your project/pubspec.yaml file:
 ```yaml
 dependencies:
   ...
-  substring_highlight: ^0.1.3      # use latest version
+  easy_rich_text: ^1.0.17      # use latest version
 ```
 
 Don't forget to *flutter pub get*.
 
 
 # Examples
-## Default Styling Example
-### Code:
-As an example, the following code snippet uses this package to highlight matching characters in each search result:  
-```
-import 'package:substring_highlight/substring_highlight.dart';
 
-...
-
-  @override
-  Widget build(BuildContext context) (
-    return Container(
-      padding: const EdgeInsets.all(12),
-      child: EasyRichText(
-        text: dropDownItem,     // search result string from database or something
-        term: searchTerm,       // user typed "et"
-      ),
-    );
-  )
-```
-### Output:
-![Screenshot](example.png)
-
-
-
-## Customized Styling Example
-### Code:
-This example adds 'textStyle' and 'textStyleHighlight' to change the colors of the text:  
-```
-import 'package:substring_highlight/substring_highlight.dart';
-
-...
-
-  @override
-  Widget build(BuildContext context) (
-    return Container(
-      padding: const EdgeInsets.all(12),
-      child: EasyRichText(
-        text: dropDownItem,                         // each string needing highlighting
-        term: searchTerm,                           // user typed "m4a"        
-        textStyle: TextStyle(                       // non-highlight style                       
-          color: Colors.grey,
-        ),
-        textStyleHighlight: TextStyle(              // highlight style
-          color: Colors.black,
-          decoration: TextDecoration.underline,
-        ),        
-      ),
-    );
-  )
-```
-### Output:
-![Screenshot](example2.png)
+See the example directory.

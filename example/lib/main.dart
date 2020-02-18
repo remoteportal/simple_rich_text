@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
 //    String text = 'no format characters';
 //    String text = r'format characters: \*\/\_';
 //    String text = '_entire string_';
-    String text = '*/_fully loaded!_*/';
+//    String text = '*/_fully loaded!_*/';
 //    String text = 'first *bold*.';
 //    String text = r'test*\_quoted\_*.';
 //    String text = r'don't*close';
@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
 //    String text = r'/Deanna/ is /awesome/!';
 //    String text = r'_back__to back_';
 //    String text = r'go to _{route}home_ page';
+    String text =
+        r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/)';
     return new MaterialApp(
       home: Scaffold(
           backgroundColor: Colors.grey,
