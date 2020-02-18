@@ -11,7 +11,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       home:
-          Scaffold(body: Center(child: EasyRichText(text: 'This is *bold*.'))),
+//          Scaffold(body: Center(child: EasyRichText(text: 'This is *bold*.'))),
+          Scaffold(
+              backgroundColor: Colors.grey,
+              body: Center(child: EasyRichText(text: 'first*bold*.'))),
     );
   }
 }

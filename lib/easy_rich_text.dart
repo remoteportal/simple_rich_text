@@ -16,10 +16,10 @@ class EasyRichText extends StatelessWidget {
     ),
   });
 
-  /// The String searched by {EasyRichText.term}.
+  /// The String to be displayed using rich text.
   final String text;
 
-  /// The sub-string that is highlighted inside {EasyRichText.text}.
+  /// For navigation
   final BuildContext context;
 
   /// The {TextStyle} of the {EasyRichText.text} that isn't highlighted.
@@ -30,8 +30,63 @@ class EasyRichText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text);
+    if (text.isEmpty) {
+      return Text(text);
+    } else {
+      print('text: $text');
+      List<InlineSpan> children = [];
+
+      Set set = Set();
+
+      void toggle(String m) {
+        if (set.contains(m)) {
+          print("REM: $m");
+          set.remove(m);
+        } else {
+          print("ADD: $m");
+          set.add(m);
+        }
+      }
+
+      // parse into array
+      List<String> spanList = text.split(RegExp(r"[*~_]"));
+      print("len=${spanList.length}");
+      print("len=$spanList");
+
+//      return Text(text);
+
+      int i = 0;
+      for (var v in spanList) {
+        if (v.isEmpty) {
+          print("e: ${text.substring(i, i + 1)}");
+          i++;
+        } else if (v.isNotEmpty) {
+          print("wrap: $v ($set)");
+//          print("wrap: ${text.substring(i, i + v.length)}");
+          TextStyle ts = TextStyle(
+              fontWeight:
+                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
+          children
+              .add(TextSpan(text: text.substring(i, i + v.length), style: ts));
+          i += v.length;
+          if (i < text.length) {
+            String m = text.substring(i, i + 1);
+//            print("format: $m");
+            toggle(m);
+            i++;
+          }
+        }
+//        if (i < text.length) {
+//          children.add(TextSpan(
+//              text: text.substring(i, i + term.length),
+//              style: textStyleHighlight));
+//          i += term.length;
+//        }
+      }
+      return RichText(text: TextSpan(children: children));
+    }
   }
+}
 
 //  Widget build(BuildContext context) {
 //    if (term.isEmpty) {
@@ -58,4 +113,4 @@ class EasyRichText extends StatelessWidget {
 //      return RichText(text: TextSpan(children: children));
 //    }
 //  }
-}
+//}
