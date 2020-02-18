@@ -2,7 +2,7 @@
 
 Easily format Flutter text with simple format characters:
 
-r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/). _{home}Click to navigate to home screen_'
+r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/). _{push:home}Click to navigate to home screen_'
 
 ![Screenshot](example.png)
 
@@ -16,6 +16,21 @@ r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/). _{home}Click
 | asterisk (*)       | bold            |
 | slash (/)       | italicize            |
 | underscore (_)       | underline            |
+
+
+# Attributes
+
+Attribute pairs are placed in curly brackets immediately after first character marker.
+Each pair is separated by a semicolon (;).
+Each pair has syntax name:value.
+
+
+| key      | meaning                |
+|-----------|----------------------|
+| color   | red, green, blue, black, white, grey, etc            |
+| pop       | pop the navigation stack            |
+| push       | push the value onto the navigation stack            |
+| repl       | replace the top route on the navigation stack            |
 
 
 

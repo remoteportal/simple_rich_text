@@ -6,6 +6,44 @@ import 'package:meta/meta.dart';
 
 //int clsInst = -1;
 
+const Map<String, int> colorMap = {
+  'aqua': 0x00FFFF,
+  'black': 0x000000,
+  'blue': 0x0000FF,
+  'brown': 0x9A6324,
+  'cream': 0xFFFDD0,
+  'cyan': 0x46f0f0,
+  'green': 0x00FF00,
+  'gray': 0x808080,
+  'grey': 0x808080,
+  'mint': 0xAAFFC3,
+  'lavender': 0xE6BEFF,
+  'new': 0xFFFF00,
+  'olive': 0x808000,
+  'orange': 0xFFA500,
+  'pink': 0xFFE1E6,
+  'purple': 0x800080,
+  'red': 0xFF0000,
+  'silver': 0xC0C0C0,
+  'white': 0xFFFFFF,
+  'yellow': 0xFFFF00
+};
+
+Color parseColor(String color) {
+//  print("parseColor: $color");
+  var v = colorMap[color];
+  if (v == null) {
+    return Colors.red;
+  } else {
+//    return Color(v);
+//    return Colors.green;
+//    int n = Color(v);
+    Color out = Color((0xff << 24) | v);
+//    print("parseColor: $color => $out");
+    return out;
+  }
+}
+
 /// Widget that renders a string with sub-string highlighting.
 class SimpleRichText extends StatelessWidget {
   SimpleRichText({
@@ -62,7 +100,7 @@ class SimpleRichText extends StatelessWidget {
       } else {
         int i = 0;
         bool acceptNext = true;
-        String route;
+        String cmd;
 
         void wrap(String v) {
           //print("wrap: $v set=$set");
@@ -77,7 +115,22 @@ class SimpleRichText extends StatelessWidget {
 //              fontWeight:
 //                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
 
+//          var map = Map<String, String>{};
+          Map<String, String> map = {};
+
+          if (cmd != null) {
+            var pairs = cmd.split(';');
+            for (var pair in pairs) {
+              var a = pair.split(':');
+              map[a[0]] = a[1];
+            }
+            print("parsed: $map");
+          }
+
           TextStyle ts = style.copyWith(
+              color: map.containsKey('color')
+                  ? parseColor(map['color'])
+                  : Colors.black,
               decoration: set.contains('_')
                   ? TextDecoration.underline
                   : TextDecoration.none,
@@ -87,9 +140,11 @@ class SimpleRichText extends StatelessWidget {
                   set.contains('*') ? FontWeight.bold : FontWeight.normal);
 
 //        TextSpan span = TextSpan(text: v, style: ts);
-          if (route != null) {
-//            print("[$clsInst] route=$route");
-            print("BBB route=$route");
+          if (map.containsKey('pop') ||
+              map.containsKey('push') ||
+              map.containsKey('repl')) {
+//            print("[$clsInst] cmd=$cmd");
+//            print("BBB cmd=$cmd");
 //          GestureDetector
 //        children.add(WidgetSpan(child: Text('****')));
 //          children.add(WidgetSpan(
@@ -102,13 +157,35 @@ class SimpleRichText extends StatelessWidget {
 
             assert(context != null, 'must pass context if using route links');
 
-            onTapNew(String caption, String r) {
-              assert(r != null);
-              return () {
-                print("TAP: $caption => /$r");
-                assert(r != null);
-                Navigator.pushNamed(context, '/$r');
-              };
+            onTapNew(String caption, Map m) {
+              assert(m != null);
+//              var a = cmd.split(':');
+//              assert(a.length == 2);
+//              String route;
+//              if (a[0] == 'push') {
+//                route = a[1];
+//              }
+
+              if (map.containsKey('push')) {
+                String v = map['push'];
+                return () {
+                  print("TAP: PUSH: $caption => /$v");
+                  assert(v != null);
+                  Navigator.pushNamed(context, '/$v');
+                };
+              } else if (map.containsKey('repl')) {
+                String v = map['repl'];
+                return () {
+                  print("TAP: POP&PUSH: $caption => /$v");
+                  assert(v != null);
+                  Navigator.popAndPushNamed(context, '/$v');
+                };
+              } else {
+                return () {
+                  print("TAP: $caption => pop");
+                  Navigator.pop(context);
+                };
+              }
             }
 
             //ISSUE: need each onTap to remember state at that point
@@ -119,7 +196,7 @@ class SimpleRichText extends StatelessWidget {
                 // and call dispose() when the TextSpan was no longer being rendered.
                 // Since TextSpan itself is @immutable, this means that you would have to manage the recognizer from outside
                 // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
-                recognizer: TapGestureRecognizer()..onTap = onTapNew(v, route),
+                recognizer: TapGestureRecognizer()..onTap = onTapNew(v, map),
                 style: ts));
           } else {
 //          children.add(span);
@@ -150,6 +227,7 @@ class SimpleRichText extends StatelessWidget {
 
         for (var v in spanList) {
 //          print("========== $v ==========");
+          cmd = null; //TRY
           if (v.isEmpty) {
             if (i < text.length) {
               String m = text.substring(i, i + 1);
@@ -163,8 +241,8 @@ class SimpleRichText extends StatelessWidget {
               print("link: $v");
               int close = v.indexOf('}');
               if (close > 0) {
-                route = v.substring(1, close);
-                print("AAA route=$route");
+                cmd = v.substring(1, close);
+                print("AAA cmd=$cmd");
                 v = v.substring(close + 1);
 //                print("remaining: $v");
               }

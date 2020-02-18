@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 //    String text = r'_back__to back_';
 //    String text = r'go to _{route}home_ page';
     String text =
-        r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/). _{home}Click to navigate to home screen_';
+        r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}underlined_, and /{color:pink}italicized/). _{push:home;color:blue}Click to navigate to home screen_';
     return new MaterialApp(
       home: Scaffold(
           backgroundColor: Colors.grey,
