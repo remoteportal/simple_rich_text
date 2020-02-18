@@ -2,6 +2,13 @@
 
 
 
+## Version 1.0.31 (2020-02-18)
+
+- added color attributes
+- added push and pop nagivation attributes
+
+
+
 ## Version 1.0.28 (2020-02-18)
 
 - fixed route bug
