@@ -52,9 +52,26 @@ class EasyRichText extends StatelessWidget {
       int i = 0;
       bool acceptNext = true;
 
+      void wrap(String v) {
+        print("wrap: $v ($set)");
+//          print("wrap: ${text.substring(i, i + v.length)}");
+        TextStyle ts = TextStyle(
+            decoration: set.contains('_')
+                ? TextDecoration.underline
+                : TextDecoration.none,
+            fontStyle: set.contains('/') ? FontStyle.italic : FontStyle.normal,
+            fontWeight:
+                set.contains('*') ? FontWeight.bold : FontWeight.normal);
+        children
+//            .add(TextSpan(text: text.substring(i, i + v.length), style: ts));
+            .add(TextSpan(text: v, style: ts));
+      }
+
       void toggle(String m) {
         if (m == r'\') {
-          print("quote: i=$i: ${text.substring(i + 1, i + 2)}");
+          String c = text.substring(i + 1, i + 2);
+          print("quote: i=$i: $c");
+          wrap(c);
           acceptNext = false;
         } else {
           if (acceptNext) {
@@ -80,18 +97,19 @@ class EasyRichText extends StatelessWidget {
             i++;
           }
         } else if (v.isNotEmpty) {
-          print("wrap: $v ($set)");
-//          print("wrap: ${text.substring(i, i + v.length)}");
-          TextStyle ts = TextStyle(
-              decoration: set.contains('_')
-                  ? TextDecoration.underline
-                  : TextDecoration.none,
-              fontStyle:
-                  set.contains('/') ? FontStyle.italic : FontStyle.normal,
-              fontWeight:
-                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
-          children
-              .add(TextSpan(text: text.substring(i, i + v.length), style: ts));
+          wrap(v);
+//          print("wrap: $v ($set)");
+////          print("wrap: ${text.substring(i, i + v.length)}");
+//          TextStyle ts = TextStyle(
+//              decoration: set.contains('_')
+//                  ? TextDecoration.underline
+//                  : TextDecoration.none,
+//              fontStyle:
+//                  set.contains('/') ? FontStyle.italic : FontStyle.normal,
+//              fontWeight:
+//                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
+//          children
+//              .add(TextSpan(text: text.substring(i, i + v.length), style: ts));
           i += v.length;
           if (i < text.length) {
             String m = text.substring(i, i + 1);
