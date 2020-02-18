@@ -90,7 +90,9 @@ class SimpleRichText extends StatelessWidget {
                 // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    //print("TAP");
+                    print("tap: $v => /$route");
+                    assert(context != null,
+                        'must pass context if using route links');
                     Navigator.pushNamed(context, '/$route');
                   },
                 style: ts));
