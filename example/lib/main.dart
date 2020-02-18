@@ -9,8 +9,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+//    String text = null;
+//    String text = 'no format characters';
 //    String text = 'first*bold*.';
-    String text = r'first*\_bold\_*.';
+//    String text = r'first*\_bold\_*.';
+//    String text = r'don't*close';
+    String text = r'_start at beginning';
     return new MaterialApp(
       home: Scaffold(
           backgroundColor: Colors.grey,

@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 class EasyRichText extends StatelessWidget {
   EasyRichText({
     @required this.text,
+    this.fussy,
     this.context,
     this.textStyle = const TextStyle(
       color: Colors.black,
@@ -15,6 +16,8 @@ class EasyRichText extends StatelessWidget {
       color: Colors.red,
     ),
   });
+
+  final bool fussy;
 
   /// The String to be displayed using rich text.
   final String text;
@@ -30,7 +33,9 @@ class EasyRichText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (text.isEmpty) {
+    if (text == null) {
+      return Text('');
+    } else if (text.isEmpty) {
       return Text(text);
     } else {
       print('text: $text');
@@ -96,6 +101,11 @@ class EasyRichText extends StatelessWidget {
 //          i += term.length;
 //        }
       }
+
+      if (fussy ?? false && set.isNotEmpty) {
+        throw 'easy_rich_text: not closed: $set';
+      }
+
       return RichText(text: TextSpan(children: children));
     }
   }
