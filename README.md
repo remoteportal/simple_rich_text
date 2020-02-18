@@ -65,7 +65,7 @@ Add a new dependency line to your project/pubspec.yaml file:
 ```yaml
 dependencies:
   ...
-  simple_rich_text: ^1.0.21      # use latest version
+  simple_rich_text: ^1.0.22      # use latest version
 ```
 
 Don't forget to *flutter pub get*.

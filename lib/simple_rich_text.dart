@@ -91,7 +91,7 @@ class SimpleRichText extends StatelessWidget {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     //print("TAP");
-                    Navigator.pushNamed(context, '/${route}');
+                    Navigator.pushNamed(context, '/$route');
                   },
                 style: ts));
             route = null;
@@ -155,7 +155,7 @@ class SimpleRichText extends StatelessWidget {
           }
         }
 
-        if (fussy ?? false && set.isNotEmpty) {
+        if ((fussy ?? false) && set.isNotEmpty) {
           throw 'simple_rich_text: not closed: $set'; //TODO: throw real error?
         }
 
