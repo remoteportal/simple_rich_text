@@ -91,7 +91,7 @@ class SimpleRichText extends StatelessWidget {
                 // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    print("tap: $v => /$route");
+                    print("TAP: $v => /$route");
                     assert(context != null,
                         'must pass context if using route links');
                     Navigator.pushNamed(context, '/$route');
@@ -126,7 +126,7 @@ class SimpleRichText extends StatelessWidget {
         }
 
         for (var v in spanList) {
-          print("========== $v ==========");
+//          print("========== $v ==========");
           if (v.isEmpty) {
             if (i < text.length) {
               String m = text.substring(i, i + 1);
@@ -137,14 +137,13 @@ class SimpleRichText extends StatelessWidget {
           } else {
             int adv = v.length;
             if (v[0] == '{') {
-              print("check $v");
+              print("link: $v");
               int close = v.indexOf('}');
               if (close > 0) {
-                String param = v.substring(1, close);
-                print("param=$param");
-                route = param;
+                route = v.substring(1, close);
+                print("route=$route");
                 v = v.substring(close + 1);
-                print("remaining: $v");
+//                print("remaining: $v");
               }
             }
             wrap(v);
