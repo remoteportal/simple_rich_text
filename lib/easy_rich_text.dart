@@ -44,7 +44,7 @@ class EasyRichText extends StatelessWidget {
       Set set = Set();
 
       // parse into array
-      List<String> spanList = text.split(RegExp(r"[*~_\\]"));
+      List<String> spanList = text.split(RegExp(r"[*~/_\\]"));
       print("len=${spanList.length}: $spanList");
 
       int i = 0;
@@ -79,11 +79,13 @@ class EasyRichText extends StatelessWidget {
           print("wrap: $v ($set)");
 //          print("wrap: ${text.substring(i, i + v.length)}");
           TextStyle ts = TextStyle(
-              fontWeight:
-                  set.contains('*') ? FontWeight.bold : FontWeight.normal,
               decoration: set.contains('_')
                   ? TextDecoration.underline
-                  : TextDecoration.none);
+                  : TextDecoration.none,
+              fontStyle:
+                  set.contains('/') ? FontStyle.italic : FontStyle.normal,
+              fontWeight:
+                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
           children
               .add(TextSpan(text: text.substring(i, i + v.length), style: ts));
           i += v.length;

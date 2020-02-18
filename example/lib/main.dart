@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
 //    String text = 'first*bold*.';
 //    String text = r'first*\_bold\_*.';
 //    String text = r'don't*close';
-    String text = r'_start at beginning';
+//    String text = r'_start at beginning';
+    String text = r'Deanna is /awesome/!';
     return new MaterialApp(
       home: Scaffold(
           backgroundColor: Colors.grey,
