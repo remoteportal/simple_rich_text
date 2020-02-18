@@ -1,5 +1,5 @@
 name: example
-description: easy_rich_text example
+description: simple_rich_text example
 
 version: 1.0.3
 
@@ -14,7 +14,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  easy_rich_text:
+  simple_rich_text:
     path: ../
 
 flutter:

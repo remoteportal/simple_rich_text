@@ -1,4 +1,4 @@
-import 'package:easy_rich_text/easy_rich_text.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           backgroundColor: Colors.grey,
           // , chars: r"[*]"
-          body: Center(child: EasyRichText(text: text))),
+          body: Center(child: SimpleRichText(text: text))),
     );
   }
 }

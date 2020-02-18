@@ -1,12 +1,12 @@
-library easy_rich_text;
+library simple_rich_text;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 /// Widget that renders a string with sub-string highlighting.
-class EasyRichText extends StatelessWidget {
-  EasyRichText({
+class SimpleRichText extends StatelessWidget {
+  SimpleRichText({
     @required this.text,
     this.chars,
     this.context,
@@ -29,10 +29,10 @@ class EasyRichText extends StatelessWidget {
   /// For navigation
   final BuildContext context;
 
-  /// The {TextStyle} of the {EasyRichText.text} that isn't highlighted.
+  /// The {TextStyle} of the {SimpleRichText.text} that isn't highlighted.
   final TextStyle textStyle;
 
-  /// The {TextStyle} of the {EasyRichText.term}s found.
+  /// The {TextStyle} of the {SimpleRichText.term}s found.
   final TextStyle textStyleHighlight;
 
   @override
@@ -42,17 +42,17 @@ class EasyRichText extends StatelessWidget {
     } else if (text.isEmpty) {
       return Text(text);
     } else {
-      print('text: $text');
+      //print('text: $text');
       List<InlineSpan> children = [];
 
       Set set = Set();
 
       // split into array
       List<String> spanList = text.split(RegExp(chars ?? r"[*~/_\\]"));
-      print("len=${spanList.length}: $spanList");
+      //print("len=${spanList.length}: $spanList");
 
       if (spanList.length == 1) {
-        print("trivial");
+        //print("trivial");
         return Text(text);
       } else {
         int i = 0;
@@ -60,7 +60,7 @@ class EasyRichText extends StatelessWidget {
         String route;
 
         void wrap(String v) {
-          print("wrap: $v set=$set");
+          //print("wrap: $v set=$set");
           TextStyle ts = TextStyle(
               decoration: set.contains('_')
                   ? TextDecoration.underline
@@ -77,7 +77,7 @@ class EasyRichText extends StatelessWidget {
 //              child: GestureDetector(
 //            child: Text('CLICK'),
 //            onTap: () async {
-//              print("TAPPED");
+//              //print("TAPPED");
 //            },
 //          )));
             children.add(TextSpan(
@@ -90,7 +90,7 @@ class EasyRichText extends StatelessWidget {
                 // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    print("TAP");
+                    //print("TAP");
                     Navigator.pushNamed(context, '/${route}');
                   },
                 style: ts));
@@ -104,16 +104,16 @@ class EasyRichText extends StatelessWidget {
         void toggle(String m) {
           if (m == r'\') {
             String c = text.substring(i + 1, i + 2);
-            print("quote: i=$i: $c");
+            //print("quote: i=$i: $c");
             wrap(c);
             acceptNext = false;
           } else {
             if (acceptNext) {
               if (set.contains(m)) {
-                print("REM: $m");
+                //print("REM: $m");
                 set.remove(m);
               } else {
-                print("ADD: $m");
+                //print("ADD: $m");
                 set.add(m);
               }
             }
@@ -123,32 +123,32 @@ class EasyRichText extends StatelessWidget {
         }
 
         for (var v in spanList) {
-          print("========== $v ==========");
+          //print("========== $v ==========");
           if (v.isEmpty) {
             if (i < text.length) {
               String m = text.substring(i, i + 1);
-//          print("e: $m");
+//          //print("e: $m");
               toggle(m);
               i++;
             }
           } else {
             int adv = v.length;
             if (v[0] == '{') {
-              print("check $v");
+              //print("check $v");
               int close = v.indexOf('}');
               if (close > 0) {
                 String param = v.substring(1, close);
-                print("param2=$param");
+                //print("param2=$param");
                 route = param;
                 v = v.substring(close + 1);
-                print("remaining: $v");
+                //print("remaining: $v");
               }
             }
             wrap(v);
             i += adv;
             if (i < text.length) {
               String m = text.substring(i, i + 1);
-              print("*** format: $m");
+              //print("*** format: $m");
               toggle(m);
               i++;
             }
@@ -156,7 +156,7 @@ class EasyRichText extends StatelessWidget {
         }
 
         if (fussy ?? false && set.isNotEmpty) {
-          throw 'easy_rich_text: not closed: $set'; //TODO: throw real error?
+          throw 'simple_rich_text: not closed: $set'; //TODO: throw real error?
         }
 
         return RichText(text: TextSpan(children: children));

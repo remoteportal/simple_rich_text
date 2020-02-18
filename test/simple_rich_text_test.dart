@@ -1,4 +1,4 @@
-import 'package:easy_rich_text/easy_rich_text.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,7 +10,7 @@ void main() {
   // with widgets in the test environment.
   testWidgets('test the thing!', (WidgetTester tester) async {
     await tester.pumpWidget(Directionality(
-        child: EasyRichText(text: 'This is *bold*'),
+        child: SimpleRichText(text: 'This is *bold*'),
         textDirection: TextDirection.ltr));
   });
 }

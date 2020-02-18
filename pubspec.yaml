@@ -1,7 +1,7 @@
-name: easy_rich_text
+name: simple_rich_text
 description: Display a Dart string in Flutter using simple rich text characters.
-version: 1.0.20        #NOEDIT
-homepage: https://github.com/remoteportal/easy_rich_text
+version: 1.0.21        #NOEDIT
+homepage: https://github.com/remoteportal/simple_rich_text
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

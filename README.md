@@ -1,4 +1,4 @@
-# easy_rich_text
+# simple_rich_text
 
 Easily format Flutter text with simple format characters:
 
@@ -50,7 +50,7 @@ r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/). _{home}Click
 Ancestor MUST have textDirection set (required by internal RichText widget), either through MaterialApp widget or explicitly wrapped by a Directionality widget:
 ```
 Directionality(
-    child: EasyRichText(text: 'Peter', term: 't'),
+    child: SimpleRichText(text: 'Peter', term: 't'),
     textDirection: TextDirection.ltr)
 ```
 
@@ -65,7 +65,7 @@ Add a new dependency line to your project/pubspec.yaml file:
 ```yaml
 dependencies:
   ...
-  easy_rich_text: ^1.0.20      # use latest version
+  simple_rich_text: ^1.0.21      # use latest version
 ```
 
 Don't forget to *flutter pub get*.
