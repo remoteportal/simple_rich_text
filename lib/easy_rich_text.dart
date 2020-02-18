@@ -7,8 +7,9 @@ import 'package:meta/meta.dart';
 class EasyRichText extends StatelessWidget {
   EasyRichText({
     @required this.text,
-    this.fussy,
+    this.chars,
     this.context,
+    this.fussy,
     this.textStyle = const TextStyle(
       color: Colors.black,
     ),
@@ -20,6 +21,8 @@ class EasyRichText extends StatelessWidget {
   // pass in pattern
   // pass-through if no matches
   final bool fussy;
+
+  final String chars;
 
   /// The String to be displayed using rich text.
   final String text;
@@ -46,7 +49,7 @@ class EasyRichText extends StatelessWidget {
       Set set = Set();
 
       // parse into array
-      List<String> spanList = text.split(RegExp(r"[*~/_\\]"));
+      List<String> spanList = text.split(RegExp(chars ?? r"[*~/_\\]"));
       print("len=${spanList.length}: $spanList");
 
       int i = 0;
@@ -54,7 +57,6 @@ class EasyRichText extends StatelessWidget {
 
       void wrap(String v) {
         print("wrap: $v ($set)");
-//          print("wrap: ${text.substring(i, i + v.length)}");
         TextStyle ts = TextStyle(
             decoration: set.contains('_')
                 ? TextDecoration.underline
@@ -62,9 +64,7 @@ class EasyRichText extends StatelessWidget {
             fontStyle: set.contains('/') ? FontStyle.italic : FontStyle.normal,
             fontWeight:
                 set.contains('*') ? FontWeight.bold : FontWeight.normal);
-        children
-//            .add(TextSpan(text: text.substring(i, i + v.length), style: ts));
-            .add(TextSpan(text: v, style: ts));
+        children.add(TextSpan(text: v, style: ts));
       }
 
       void toggle(String m) {
@@ -98,18 +98,6 @@ class EasyRichText extends StatelessWidget {
           }
         } else if (v.isNotEmpty) {
           wrap(v);
-//          print("wrap: $v ($set)");
-////          print("wrap: ${text.substring(i, i + v.length)}");
-//          TextStyle ts = TextStyle(
-//              decoration: set.contains('_')
-//                  ? TextDecoration.underline
-//                  : TextDecoration.none,
-//              fontStyle:
-//                  set.contains('/') ? FontStyle.italic : FontStyle.normal,
-//              fontWeight:
-//                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
-//          children
-//              .add(TextSpan(text: text.substring(i, i + v.length), style: ts));
           i += v.length;
           if (i < text.length) {
             String m = text.substring(i, i + 1);
@@ -118,16 +106,10 @@ class EasyRichText extends StatelessWidget {
             i++;
           }
         }
-//        if (i < text.length) {
-//          children.add(TextSpan(
-//              text: text.substring(i, i + term.length),
-//              style: textStyleHighlight));
-//          i += term.length;
-//        }
       }
 
       if (fussy ?? false && set.isNotEmpty) {
-        throw 'easy_rich_text: not closed: $set';
+        throw 'easy_rich_text: not closed: $set'; //TODO: throw real error?
       }
 
       return RichText(text: TextSpan(children: children));
