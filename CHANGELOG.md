@@ -2,6 +2,12 @@
 
 
 
+## Version 1.0.24 (2020-02-18)
+
+- fixed route bug
+
+
+
 ## Version 1.0.22 (2020-02-18)
 
 - fixed lint errors

@@ -71,6 +71,7 @@ class SimpleRichText extends StatelessWidget {
                   set.contains('*') ? FontWeight.bold : FontWeight.normal);
 //        TextSpan span = TextSpan(text: v, style: ts);
           if (route != null) {
+            print("route=$route");
 //          GestureDetector
 //        children.add(WidgetSpan(child: Text('****')));
 //          children.add(WidgetSpan(
@@ -94,9 +95,9 @@ class SimpleRichText extends StatelessWidget {
                     assert(context != null,
                         'must pass context if using route links');
                     Navigator.pushNamed(context, '/$route');
+                    route = null;
                   },
                 style: ts));
-            route = null;
           } else {
 //          children.add(span);
             children.add(TextSpan(text: v, style: ts));
@@ -125,7 +126,7 @@ class SimpleRichText extends StatelessWidget {
         }
 
         for (var v in spanList) {
-          //print("========== $v ==========");
+          print("========== $v ==========");
           if (v.isEmpty) {
             if (i < text.length) {
               String m = text.substring(i, i + 1);
@@ -136,14 +137,14 @@ class SimpleRichText extends StatelessWidget {
           } else {
             int adv = v.length;
             if (v[0] == '{') {
-              //print("check $v");
+              print("check $v");
               int close = v.indexOf('}');
               if (close > 0) {
                 String param = v.substring(1, close);
-                //print("param2=$param");
+                print("param=$param");
                 route = param;
                 v = v.substring(close + 1);
-                //print("remaining: $v");
+                print("remaining: $v");
               }
             }
             wrap(v);
