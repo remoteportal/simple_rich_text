@@ -9,12 +9,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+//    String text = 'first*bold*.';
+    String text = 'first*_bold_*.';
     return new MaterialApp(
-      home:
-//          Scaffold(body: Center(child: EasyRichText(text: 'This is *bold*.'))),
-          Scaffold(
-              backgroundColor: Colors.grey,
-              body: Center(child: EasyRichText(text: 'first*bold*.'))),
+      home: Scaffold(
+          backgroundColor: Colors.grey,
+          body: Center(child: EasyRichText(text: text))),
     );
   }
 }
