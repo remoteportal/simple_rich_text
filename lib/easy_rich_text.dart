@@ -1,5 +1,6 @@
 library easy_rich_text;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
@@ -48,7 +49,7 @@ class EasyRichText extends StatelessWidget {
 
       Set set = Set();
 
-      // parse into array
+      // split into array
       List<String> spanList = text.split(RegExp(chars ?? r"[*~/_\\]"));
       print("len=${spanList.length}: $spanList");
 
@@ -65,21 +66,36 @@ class EasyRichText extends StatelessWidget {
             fontStyle: set.contains('/') ? FontStyle.italic : FontStyle.normal,
             fontWeight:
                 set.contains('*') ? FontWeight.bold : FontWeight.normal);
-        TextSpan span = TextSpan(text: v, style: ts);
+//        TextSpan span = TextSpan(text: v, style: ts);
         if (route != null) {
 //          GestureDetector
 //        children.add(WidgetSpan(child: Text('****')));
-          children.add(WidgetSpan(
-              child: GestureDetector(
-            child: Text('CLICK'),
-            onTap: () async {
-              print("TAPPED");
-            },
-          )));
+//          children.add(WidgetSpan(
+//              child: GestureDetector(
+//            child: Text('CLICK'),
+//            onTap: () async {
+//              print("TAPPED");
+//            },
+//          )));
+          children.add(TextSpan(
+              text: v,
+//              text: 'TAP',
+              // Beware!  This class is only safe because the TapGestureRecognizer is not given a deadline and therefore never allocates any resources.
+              // In any other situation -- setting a deadline, using any of the less trivial recognizers, etc -- you would have to manage the gesture recognizer's lifetime
+              // and call dispose() when the TextSpan was no longer being rendered.
+              // Since TextSpan itself is @immutable, this means that you would have to manage the recognizer from outside
+              // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  print("TAP");
+                  Navigator.pushNamed(context, '/${route}');
+                },
+              style: ts));
+          route = null;
         } else {
-          children.add(span);
+//          children.add(span);
+          children.add(TextSpan(text: v, style: ts));
         }
-//        children.add(span);
       }
 
       void toggle(String m) {
@@ -121,7 +137,6 @@ class EasyRichText extends StatelessWidget {
               String param = v.substring(1, close);
               print("param2=$param");
               route = param;
-//                  Navigator.pushNamed(context, param);
               v = v.substring(close + 1);
               print("remaining: $v");
             }
