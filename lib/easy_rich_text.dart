@@ -65,7 +65,21 @@ class EasyRichText extends StatelessWidget {
             fontStyle: set.contains('/') ? FontStyle.italic : FontStyle.normal,
             fontWeight:
                 set.contains('*') ? FontWeight.bold : FontWeight.normal);
-        children.add(TextSpan(text: v, style: ts));
+        TextSpan span = TextSpan(text: v, style: ts);
+        if (route != null) {
+//          GestureDetector
+//        children.add(WidgetSpan(child: Text('****')));
+          children.add(WidgetSpan(
+              child: GestureDetector(
+            child: Text('CLICK'),
+            onTap: () async {
+              print("TAPPED");
+            },
+          )));
+        } else {
+          children.add(span);
+        }
+//        children.add(span);
       }
 
       void toggle(String m) {
