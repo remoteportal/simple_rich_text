@@ -1,0 +1,21 @@
+name: example
+description: easy_rich_text example
+
+version: 1.0.3
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  easy_rich_text:
+    path: ../
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,18 @@
+name: easy_rich_text
+description: Highlight Flutter text at the character-level for customizable and simple search term highlighting.
+version: 1.0.2        #NOEDIT
+homepage: https://github.com/remoteportal/easy_rich_text
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: ^1.1.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
