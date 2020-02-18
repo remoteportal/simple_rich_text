@@ -18,7 +18,7 @@ this is _*bold and underlined*_.
 Ancestor MUST have textDirection set (required by internal RichText widget), either through MaterialApp widget or explicitly wrapped by a Directionality widget:
 ```
 Directionality(
-    child: SubstringHighlight(text: 'Peter', term: 't'),
+    child: EasyRichText(text: 'Peter', term: 't'),
     textDirection: TextDirection.ltr)
 ```
 
@@ -52,7 +52,7 @@ import 'package:substring_highlight/substring_highlight.dart';
   Widget build(BuildContext context) (
     return Container(
       padding: const EdgeInsets.all(12),
-      child: SubstringHighlight(
+      child: EasyRichText(
         text: dropDownItem,     // search result string from database or something
         term: searchTerm,       // user typed "et"
       ),
@@ -76,7 +76,7 @@ import 'package:substring_highlight/substring_highlight.dart';
   Widget build(BuildContext context) (
     return Container(
       padding: const EdgeInsets.all(12),
-      child: SubstringHighlight(
+      child: EasyRichText(
         text: dropDownItem,                         // each string needing highlighting
         term: searchTerm,                           // user typed "m4a"        
         textStyle: TextStyle(                       // non-highlight style                       
