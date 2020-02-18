@@ -2,6 +2,8 @@
 
 Easily format Flutter text with simple format characters:
 
+r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/). _{home}Click to navigate to home screen_'
+
 ![Screenshot](example.png)
 
  
@@ -14,6 +16,13 @@ Easily format Flutter text with simple format characters:
 | asterisk (*)       | bold            |
 | slash (/)       | italicize            |
 | underscore (_)       | underline            |
+
+
+
+# Features
+
+- support text hyperlinks to other screens by preceding formatted text with route inside curly brackets:  e.g., "... _{calendar}go to calendar screen_".
+
 
 
 
@@ -56,7 +65,7 @@ Add a new dependency line to your project/pubspec.yaml file:
 ```yaml
 dependencies:
   ...
-  easy_rich_text: ^1.0.17      # use latest version
+  easy_rich_text: ^1.0.20      # use latest version
 ```
 
 Don't forget to *flutter pub get*.
