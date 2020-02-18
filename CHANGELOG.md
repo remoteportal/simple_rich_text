@@ -2,6 +2,12 @@
 
 
 
+## Version 1.0.28 (2020-02-18)
+
+- fixed route bug
+
+
+
 ## Version 1.0.24 (2020-02-18)
 
 - fixed route bug
