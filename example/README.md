@@ -12,10 +12,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String text =
+        r'*_/this is all three*_/ (*{color:red}bold*, _underlined_, and /{color:brown}italicized/). _{push:home;color:blue}clickable hyperlink to home screen_';
     return new MaterialApp(
       home: Scaffold(
-          backgroundColor: Colors.grey,
-          body: Center(child: SimpleRichText(text: r'*_/this is all three*_/ (*bold*, _underlined_, and /italicized/). _{home}Click to navigate to home screen_'))),
+          body: Center(
+              child: SimpleRichText(text: text))),
     );
   }
 }

@@ -4,8 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-//int clsInst = -1;
-
 const Map<String, int> colorMap = {
   'aqua': 0x00FFFF,
   'black': 0x000000,
@@ -46,44 +44,38 @@ Color parseColor(String color) {
 
 /// Widget that renders a string with sub-string highlighting.
 class SimpleRichText extends StatelessWidget {
-  SimpleRichText({
-    @required this.text,
-    this.chars,
-    this.context,
-    this.fussy,
-    this.style = const TextStyle(),
-//    this.style = const TextStyle(
-//      color: Colors.black,
-//    ),
-//    this.textStyleHighlight = const TextStyle(
-//      color: Colors.red,
-//    ),
-  });
-
-//  final int clsInst = ++clsInst;
-
-  final bool fussy;
+  SimpleRichText(
+      {@required this.text,
+      this.chars,
+      this.context,
+      this.fussy,
+      this.log,
+      this.style});
 
   final String chars;
-
-  /// The String to be displayed using rich text.
-  final String text;
 
   /// For navigation
   final BuildContext context;
 
+  /// Throw exception if tags not closed (e.g., "this is *bold" because no closing * character)
+  final bool fussy;
+
+  /// Pass in true for debugging/logging/trace
+  final bool log;
+
   /// The {TextStyle} of the {SimpleRichText.text} that isn't highlighted.
   final TextStyle style;
+
+  /// The String to be displayed using rich text.
+  final String text;
 
   /// The {TextStyle} of the {SimpleRichText.term}s found.
 //  final TextStyle textStyleHighlight;
 
   @override
   Widget build(BuildContext context) {
-    if (text == null) {
+    if (text == null || text.isEmpty) {
       return Text('');
-    } else if (text.isEmpty) {
-      return Text(text);
     } else {
       //print('text: $text');
       List<InlineSpan> children = [];
@@ -95,8 +87,12 @@ class SimpleRichText extends StatelessWidget {
       //print("len=${spanList.length}: $spanList");
 
       if (spanList.length == 1) {
-        //print("trivial");
-        return Text(text);
+        print("trivial");
+        if (style == null) {
+          return Text('');
+        } else {
+          return Text(text, style: style);
+        }
       } else {
         int i = 0;
         bool acceptNext = true;
@@ -104,46 +100,55 @@ class SimpleRichText extends StatelessWidget {
 
         void wrap(String v) {
           //print("wrap: $v set=$set");
-//          TextStyle xxx = textStyle.;
 
-//          TextStyle ts = TextStyle(
-//              decoration: set.contains('_')
-//                  ? TextDecoration.underline
-//                  : TextDecoration.none,
-//              fontStyle:
-//                  set.contains('/') ? FontStyle.italic : FontStyle.normal,
-//              fontWeight:
-//                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
-
-//          var map = Map<String, String>{};
           Map<String, String> map = {};
 
           if (cmd != null) {
             var pairs = cmd.split(';');
             for (var pair in pairs) {
               var a = pair.split(':');
-              map[a[0]] = a[1];
+              if (a.length == 2) {
+                map[a[0].trim()] = a[1].trim();
+              } else {
+                throw "attribute value is missing a value (e.g., you passed {key} but not {key:value}";
+              }
             }
-            print("parsed: $map");
+            if (log ?? false) print("attributes: $map");
           }
 
-          TextStyle ts = style.copyWith(
-              color: map.containsKey('color')
-                  ? parseColor(map['color'])
-                  : Colors.black,
-              decoration: set.contains('_')
-                  ? TextDecoration.underline
-                  : TextDecoration.none,
-              fontStyle:
-                  set.contains('/') ? FontStyle.italic : FontStyle.normal,
-              fontWeight:
-                  set.contains('*') ? FontWeight.bold : FontWeight.normal);
+          TextStyle ts;
+          if (style == null) {
+            //TODO//H//TRAVESTY: needless duplicated code
+            ts = TextStyle(
+                color: map.containsKey('color')
+                    ? parseColor(map['color'])
+                    : DefaultTextStyle.of(context)
+                        .style
+                        .color, //WARNING: not sure if this is correct?
+                decoration: set.contains('_')
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
+                fontStyle:
+                    set.contains('/') ? FontStyle.italic : FontStyle.normal,
+                fontWeight:
+                    set.contains('*') ? FontWeight.bold : FontWeight.normal);
+          } else {
+            ts = style.copyWith(
+                color: map.containsKey('color')
+                    ? parseColor(map['color'])
+                    : style.color,
+                decoration: set.contains('_')
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
+                fontStyle:
+                    set.contains('/') ? FontStyle.italic : FontStyle.normal,
+                fontWeight:
+                    set.contains('*') ? FontWeight.bold : FontWeight.normal);
+          }
 
-//        TextSpan span = TextSpan(text: v, style: ts);
           if (map.containsKey('pop') ||
               map.containsKey('push') ||
               map.containsKey('repl')) {
-//            print("[$clsInst] cmd=$cmd");
 //            print("BBB cmd=$cmd");
 //          GestureDetector
 //        children.add(WidgetSpan(child: Text('****')));
@@ -159,36 +164,28 @@ class SimpleRichText extends StatelessWidget {
 
             onTapNew(String caption, Map m) {
               assert(m != null);
-//              var a = cmd.split(':');
-//              assert(a.length == 2);
-//              String route;
-//              if (a[0] == 'push') {
-//                route = a[1];
-//              }
-
               if (map.containsKey('push')) {
                 String v = map['push'];
                 return () {
-                  print("TAP: PUSH: $caption => /$v");
+                  if (log ?? false) print("TAP: PUSH: $caption => /$v");
                   assert(v != null);
                   Navigator.pushNamed(context, '/$v');
                 };
               } else if (map.containsKey('repl')) {
                 String v = map['repl'];
                 return () {
-                  print("TAP: POP&PUSH: $caption => /$v");
+                  if (log ?? false) print("TAP: POP&PUSH: $caption => /$v");
                   assert(v != null);
                   Navigator.popAndPushNamed(context, '/$v');
                 };
               } else {
                 return () {
-                  print("TAP: $caption => pop");
+                  if (log ?? false) print("TAP: $caption => pop");
                   Navigator.pop(context);
                 };
               }
             }
 
-            //ISSUE: need each onTap to remember state at that point
             children.add(TextSpan(
                 text: v,
                 // Beware!  This class is only safe because the TapGestureRecognizer is not given a deadline and therefore never allocates any resources.
@@ -199,7 +196,6 @@ class SimpleRichText extends StatelessWidget {
                 recognizer: TapGestureRecognizer()..onTap = onTapNew(v, map),
                 style: ts));
           } else {
-//          children.add(span);
             children.add(TextSpan(text: v, style: ts));
           }
         }
@@ -238,11 +234,11 @@ class SimpleRichText extends StatelessWidget {
           } else {
             int adv = v.length;
             if (v[0] == '{') {
-              print("link: $v");
+              if (log ?? false) print("link: $v");
               int close = v.indexOf('}');
               if (close > 0) {
                 cmd = v.substring(1, close);
-                print("AAA cmd=$cmd");
+                if (log ?? false) print("AAA cmd=$cmd");
                 v = v.substring(close + 1);
 //                print("remaining: $v");
               }

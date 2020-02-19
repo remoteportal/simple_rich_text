@@ -2,6 +2,12 @@
 
 
 
+## Version 1.0.32 (2020-02-19)
+
+- improved documentation
+
+
+
 ## Version 1.0.31 (2020-02-18)
 
 - added color attributes

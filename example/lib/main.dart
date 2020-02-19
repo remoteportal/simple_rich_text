@@ -22,14 +22,14 @@ class MyApp extends StatelessWidget {
 //    String text = r'_back__to back_';
 //    String text = r'go to _{route}home_ page';
     String text =
-        r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}underlined_, and /{color:pink}italicized/). _{push:home;color:blue}Click to navigate to home screen_';
+        r'*_/this is all three*_/ (*{color:red}bold*, _underlined_, and /{color:brown}italicized/). _{push:home;color:blue}clickable hyperlink to home screen_';
     return new MaterialApp(
       home: Scaffold(
-          backgroundColor: Colors.grey,
           // , chars: r"[*]"
+//          backgroundColor: Colors.grey[300],
           body: Center(
               child: SimpleRichText(
-                  text: text, style: TextStyle(color: Colors.yellow)))),
+                  text: text, style: TextStyle(color: Colors.orange)))),
     );
   }
 }
