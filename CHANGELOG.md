@@ -2,7 +2,7 @@
 
 
 
-## Version 1.0.32 (2020-02-19)
+## Version 1.0.33 (2020-02-19)
 
 - improved documentation
 

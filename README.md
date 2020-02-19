@@ -4,7 +4,7 @@ Easily format Flutter text with simple format characters.
 
 Motivation: lowest-possible development friction to add color, formatting, and named-route navigation to Flutter text.
 
-In comparision, [easy_rich_text](https://pub.dev/packages/easy_rich_text) requires lots of code (i.e, patternList of EasyRichTextPattern objects). 
+In comparison, [easy_rich_text](https://pub.dev/packages/easy_rich_text) requires lots of code (i.e, patternList of EasyRichTextPattern objects). 
 
 
 ## Input
@@ -146,7 +146,7 @@ Add a new dependency line to your project/pubspec.yaml file:
 ```yaml
 dependencies:
   ...
-  simple_rich_text: ^1.0.32      # use latest version
+  simple_rich_text: ^1.0.33      # use latest version
 ```
 
 Don't forget to *flutter pub get*.
