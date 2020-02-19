@@ -9,9 +9,7 @@ In comparison, [easy_rich_text](https://pub.dev/packages/easy_rich_text) require
 
 ## Input
 ```
-SimpleRichText(
-    text: r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}underlined_, and /{color:brown}italicized/). _{push:home;color:blue}clickable hyperlink to home screen_',
-    style: TextStyle(color: Colors.yellow))
+SimpleRichText(text: r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}underlined_, and /{color:brown}italicized/). _{push:home;color:blue}clickable hyperlink to home screen_')
 ```
 
 ## Output
@@ -146,7 +144,7 @@ Add a new dependency line to your project/pubspec.yaml file:
 ```yaml
 dependencies:
   ...
-  simple_rich_text: ^1.0.33      # use latest version
+  simple_rich_text: ^1.0.34      # use latest version
 ```
 
 Don't forget to *flutter pub get*.
