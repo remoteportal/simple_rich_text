@@ -116,13 +116,22 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  simple_navigation:
+    dependency: transitive
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "13c18bcd3a1e47864a692260365ed8290a3d0c11"
+      url: "https://github.com/remoteportal/simple_navigation.git"
+    source: git
+    version: "1.0.30"
   simple_rich_text:
     dependency: "direct dev"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.0.32"
+    version: "1.0.34"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -3,6 +3,7 @@ library simple_rich_text;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:simple_navigation/simple_navigation.dart';
 
 const Map<String, int> colorMap = {
   'aqua': 0x00FFFF,
@@ -169,19 +170,22 @@ class SimpleRichText extends StatelessWidget {
                 return () {
                   if (log ?? false) print("TAP: PUSH: $caption => /$v");
                   assert(v != null);
-                  Navigator.pushNamed(context, '/$v');
+//                  Navigator.pushNamed(context, '/$v');
+                  Nav.push('/$v');
                 };
               } else if (map.containsKey('repl')) {
                 String v = map['repl'];
                 return () {
                   if (log ?? false) print("TAP: POP&PUSH: $caption => /$v");
                   assert(v != null);
-                  Navigator.popAndPushNamed(context, '/$v');
+//                  Navigator.popAndPushNamed(context, '/$v');
+                  Nav.repl('/$v');
                 };
               } else {
                 return () {
                   if (log ?? false) print("TAP: $caption => pop");
-                  Navigator.pop(context);
+//                  Navigator.pop(context);
+                  Nav.pop();
                 };
               }
             }

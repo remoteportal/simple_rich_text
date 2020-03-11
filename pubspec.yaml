@@ -1,6 +1,6 @@
 name: simple_rich_text
 description: Display a Dart string in Flutter using simple rich text characters.
-version: 1.0.34        #NOEDIT
+version: 1.0.35        #NOEDIT
 homepage: https://github.com/remoteportal/simple_rich_text
 
 environment:
@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.1.8
+  simple_navigation:
+    git: https://github.com/remoteportal/simple_navigation.git
 
 dev_dependencies:
   flutter_test:
