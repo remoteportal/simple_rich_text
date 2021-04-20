@@ -129,7 +129,7 @@ Change text color by passing color as attribute:
 Ancestor MUST have textDirection set (required by internal RichText widget), either through MaterialApp widget or explicitly wrapped by a Directionality widget:
 ```
 Directionality(
-    child: SimpleRichText(text: 'Peter', term: 't'),
+    child: SimpleRichText('Peter', term: 't'),
     textDirection: TextDirection.ltr)
 ```
 
@@ -144,7 +144,7 @@ Add a new dependency line to your project/pubspec.yaml file:
 ```yaml
 dependencies:
   ...
-  simple_rich_text: ^1.0.34      # use latest version
+  simple_rich_text: ^2.0.35      # use latest version
 ```
 
 Don't forget to *flutter pub get*.

@@ -2,6 +2,15 @@
 
 
 
+## Version 2.0.35 (2021-04-20)
+
+- upgraded to Dart 2.0 [issue #4]
+- migrated to null-safety
+- migrated from RaisedButton to ElevatedButton
+- replaced RichText() with Text.rich() [issue #5]
+
+
+
 ## Version 1.0.33 (2020-02-19)
 
 - improved documentation

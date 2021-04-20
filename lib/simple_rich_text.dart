@@ -2,7 +2,6 @@ library simple_rich_text;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:simple_navigation/simple_navigation.dart';
 
 const Map<String, int> colorMap = {
@@ -28,7 +27,7 @@ const Map<String, int> colorMap = {
   'yellow': 0xFFFF00
 };
 
-Color parseColor(String color) {
+Color parseColor(String? color) {
 //  print("parseColor: $color");
   var v = colorMap[color];
   if (v == null) {
@@ -45,27 +44,22 @@ Color parseColor(String color) {
 
 /// Widget that renders a string with sub-string highlighting.
 class SimpleRichText extends StatelessWidget {
-  SimpleRichText(
-      {@required this.text,
-      this.chars,
-      this.context,
-      this.fussy,
-      this.log,
-      this.style});
+  SimpleRichText(this.text,
+      {this.chars, this.context, this.fussy, this.log, this.style});
 
-  final String chars;
+  final String? chars;
 
   /// For navigation
-  final BuildContext context;
+  final BuildContext? context;
 
   /// Throw exception if tags not closed (e.g., "this is *bold" because no closing * character)
-  final bool fussy;
+  final bool? fussy;
 
   /// Pass in true for debugging/logging/trace
-  final bool log;
+  final bool? log;
 
   /// The {TextStyle} of the {SimpleRichText.text} that isn't highlighted.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// The String to be displayed using rich text.
   final String text;
@@ -75,7 +69,7 @@ class SimpleRichText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (text == null || text.isEmpty) {
+    if (text.isEmpty) {
       return Text('');
     } else {
       //print('text: $text');
@@ -97,7 +91,7 @@ class SimpleRichText extends StatelessWidget {
       } else {
         int i = 0;
         bool acceptNext = true;
-        String cmd;
+        String? cmd;
 
         void wrap(String v) {
           //print("wrap: $v set=$set");
@@ -134,10 +128,10 @@ class SimpleRichText extends StatelessWidget {
                 fontWeight:
                     set.contains('*') ? FontWeight.bold : FontWeight.normal);
           } else {
-            ts = style.copyWith(
+            ts = style!.copyWith(
                 color: map.containsKey('color')
                     ? parseColor(map['color'])
-                    : style.color,
+                    : style!.color,
                 decoration: set.contains('_')
                     ? TextDecoration.underline
                     : TextDecoration.none,
@@ -161,12 +155,9 @@ class SimpleRichText extends StatelessWidget {
 //            },
 //          )));
 
-            assert(context != null, 'must pass context if using route links');
-
             onTapNew(String caption, Map m) {
-              assert(m != null);
               if (map.containsKey('push')) {
-                String v = map['push'];
+                String? v = map['push'];
                 return () {
                   if (log ?? false) print("TAP: PUSH: $caption => /$v");
                   assert(v != null);
@@ -174,7 +165,7 @@ class SimpleRichText extends StatelessWidget {
                   Nav.push('/$v');
                 };
               } else if (map.containsKey('repl')) {
-                String v = map['repl'];
+                String? v = map['repl'];
                 return () {
                   if (log ?? false) print("TAP: POP&PUSH: $caption => /$v");
                   assert(v != null);
@@ -227,7 +218,7 @@ class SimpleRichText extends StatelessWidget {
 
         for (var v in spanList) {
 //          print("========== $v ==========");
-          cmd = null; //TRY
+          cmd = null;
           if (v.isEmpty) {
             if (i < text.length) {
               String m = text.substring(i, i + 1);
@@ -262,7 +253,7 @@ class SimpleRichText extends StatelessWidget {
           throw 'simple_rich_text: not closed: $set'; //TODO: throw real error?
         }
 
-        return RichText(text: TextSpan(children: children));
+        return Text.rich(TextSpan(children: children));
       }
     }
   }

@@ -1,6 +1,6 @@
-import 'package:simple_rich_text/simple_rich_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 
 // https://flutter.dev/docs/cookbook/testing/widget/introduction#3-create-a-testwidgets-test
 
@@ -10,7 +10,7 @@ void main() {
   // with widgets in the test environment.
   testWidgets('test the thing!', (WidgetTester tester) async {
     await tester.pumpWidget(Directionality(
-        child: SimpleRichText(text: 'This is *bold*'),
+        child: SimpleRichText('This is *bold*'),
         textDirection: TextDirection.ltr));
   });
 }

@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
           // , chars: r"[*]"
 //          backgroundColor: Colors.grey[300],
           body: Center(
-              child: SimpleRichText(
-                  text: text, style: TextStyle(color: Colors.orange)))),
+              child: SimpleRichText(text,
+                  style: TextStyle(color: Colors.orange)))),
     );
   }
 }
