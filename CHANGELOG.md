@@ -2,6 +2,13 @@
 
 
 
+
+## Version 2.0.43 (2021-04-21)
+
+- improved README
+
+
+
 ## Version 2.0.37 (2021-04-21)
 
 - added new line option, some fontStyles, text overflow, max,etc  [pull request #3]
