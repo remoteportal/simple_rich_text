@@ -27,25 +27,27 @@ SimpleRichText(r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}under
 
 # Format Characters
 
-These are non-standard (not markdown compatible) but are more intuitive, in my opinion.
-
-You can use multiple characters at the same time:
-```
-"this is _/underlined and italicized/_.
-```
-
-If using multiple characters the open and closed sequences _don't_ need to be in exact palindrome matching order:
-
-```
-"these are */equivalent/*."
-"these are */equivalent*/."
-```
+These are non-standard (not markdown compatible) but are more intuitive, in my opinion:
 
 | character      | format effect                | simple_rich_text example | Flutter output |
 |-----------|----------------------|----------------------|----------------------|
-| asterisk (*)       | bold            | this is *bold* | this is **bold** |
-| slash (/)       | italics            | this is /italicized/ |this is *italicized* |
-| underscore (_)       | underline            | this is \_underlined\_ |this is <ins>underlined</ins> |
+| asterisk (*)       | bold            | "this is \*bold\*" | this is **bold** |
+| slash (/)       | italics            | "this is /italicized/" |this is *italicized* |
+| underscore (_)       | underline            | "this is \_underlined\_" |this is <ins>underlined</ins> |
+
+
+You can use multiple characters at the same time:
+```
+"this is _/underlined and italicized/_"
+```
+
+You can be sloppy!  Unlike HTML, for convenience, if using multiple characters the open and closed sequences, they _don't_ need to be in exact palindrome matching order:
+
+```
+"these are */equivalent/* and works without problems."
+"these are */equivalent*/ and works without problems."
+```
+
 
 
 # Attributes
