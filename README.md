@@ -9,7 +9,7 @@ In comparison, [easy_rich_text](https://pub.dev/packages/easy_rich_text) require
 
 ## Input
 ```
-SimpleRichText(text: r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}underlined_, and /{color:brown}italicized/). _{push:home;color:blue}clickable hyperlink to home screen_')
+SimpleRichText(r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}underlined_, and /{color:brown}italicized/). _{push:home;color:blue}clickable hyperlink to home screen_')
 ```
 
 ## Output
@@ -41,11 +41,11 @@ If using multiple characters the open and closed sequences _don't_ need to be in
 "these are */equivalent*/."
 ```
 
-| character      | format effect                | example |
-|-----------|----------------------|----------------------|
-| asterisk (*)       | bold            | this is *bold* |
-| slash (/)       | italics            | this is /italicized/ |
-| underscore (_)       | underline            | this is _underlined_ |
+| character      | format effect                | simple_rich_text example | Flutter output |
+|-----------|----------------------|----------------------|----------------------|
+| asterisk (*)       | bold            | this is *bold* | this is **bold** |
+| slash (/)       | italics            | this is /italicized/ |this is *italicized* |
+| underscore (_)       | underline            | this is \_underlined\_ |this is <ins>underlined</ins> |
 
 
 # Attributes
@@ -56,7 +56,7 @@ Each pair has syntax name:value.
 
 
 
-| key      | meaning                | underlying Dart code |
+| key      | meaning                | implemented navigation code |
 |-----------|----------------------|----------------------|
 | color   | red, blue, etc           | textStyle.color: *color-value* |
 | pop       | pop the navigation stack            |  Navigator.pop(context);  |
