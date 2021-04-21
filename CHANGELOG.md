@@ -2,6 +2,12 @@
 
 
 
+## Version 2.0.36 (2021-04-21)
+
+- can now pass optional textAlign parameter to control how text should be aligned horizontally [issue #1]
+
+
+
 ## Version 2.0.35 (2021-04-20)
 
 - upgraded to Dart 2.0 [issue #4]

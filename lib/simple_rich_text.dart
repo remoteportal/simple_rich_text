@@ -45,7 +45,12 @@ Color parseColor(String? color) {
 /// Widget that renders a string with sub-string highlighting.
 class SimpleRichText extends StatelessWidget {
   SimpleRichText(this.text,
-      {this.chars, this.context, this.fussy, this.log, this.style});
+      {this.chars,
+      this.context,
+      this.fussy,
+      this.log,
+      this.style,
+      this.textAlign});
 
   final String? chars;
 
@@ -63,6 +68,9 @@ class SimpleRichText extends StatelessWidget {
 
   /// The String to be displayed using rich text.
   final String text;
+
+  /// How the text should be aligned horizontally.
+  final TextAlign? textAlign;
 
   /// The {TextStyle} of the {SimpleRichText.term}s found.
 //  final TextStyle textStyleHighlight;
@@ -82,7 +90,7 @@ class SimpleRichText extends StatelessWidget {
       //print("len=${spanList.length}: $spanList");
 
       if (spanList.length == 1) {
-        print("trivial");
+        print('trivial');
         if (style == null) {
           return Text('');
         } else {
@@ -253,7 +261,8 @@ class SimpleRichText extends StatelessWidget {
           throw 'simple_rich_text: not closed: $set'; //TODO: throw real error?
         }
 
-        return Text.rich(TextSpan(children: children));
+        return Text.rich(TextSpan(children: children),
+            textAlign: this.textAlign);
       }
     }
   }

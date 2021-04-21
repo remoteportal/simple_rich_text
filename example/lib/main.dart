@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
 //          backgroundColor: Colors.grey[300],
           body: Center(
               child: SimpleRichText(text,
-                  style: TextStyle(color: Colors.orange)))),
+                  style: TextStyle(color: Colors.orange),
+                  textAlign: TextAlign.start))),
     );
   }
 }

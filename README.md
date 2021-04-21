@@ -2,7 +2,7 @@
 
 Easily format Flutter text with simple format characters.
 
-Motivation: lowest-possible development friction to add color, formatting, and named-route navigation to Flutter text.
+Motivation: lowest-possible development friction to add color and formatting to text.
 
 In comparison, [easy_rich_text](https://pub.dev/packages/easy_rich_text) requires lots of code (i.e, patternList of EasyRichTextPattern objects). 
 
@@ -27,14 +27,14 @@ SimpleRichText(text: r'*_/this is all three*_/ (*{color:red}bold*, _{color:green
 
 # Format Characters
 
-These are non-standard (not markdown compatible) but are more intuitive in my opinion.
+These are non-standard (not markdown compatible) but are more intuitive, in my opinion.
 
 You can use multiple characters at the same time:
 ```
 "this is _/underlined and italicized/_.
 ```
 
-If using multiple characters the open and closed sequences don't need to be in palindrome order:
+If using multiple characters the open and closed sequences /don't/ need to be in exact palindrome matching order:
 
 ```
 "these are */equivalent/*."
@@ -137,17 +137,6 @@ Directionality(
 # Pull Requests
 Pull requests are welcome!
 
-
-# Usage
-Add a new dependency line to your project/pubspec.yaml file:
-
-```yaml
-dependencies:
-  ...
-  simple_rich_text: ^2.0.35      # use latest version
-```
-
-Don't forget to *flutter pub get*.
 
 
 # Examples
