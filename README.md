@@ -7,23 +7,6 @@ Motivation: lowest-possible development friction to add color and formatting to 
 In comparison, [easy_rich_text](https://pub.dev/packages/easy_rich_text) requires lots of code (i.e, patternList of EasyRichTextPattern objects). 
 
 
-## Input
-```
-SimpleRichText(r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}underlined_, and /{color:brown}italicized/). _{push:home;color:blue}clickable hyperlink to home screen_')
-```
-
-## Output
-![Screenshot](example.png)
-
- 
-
-# Improvements, Bugs, and Deficiencies
-
-- [ ] user-definable format characters
-- [ ] user-definable callback functions for custom formatting
-- [ ] support non-named navigation (only pushNamed, etc., supported at present)  
-
-
 
 # Format Characters
 
@@ -36,17 +19,18 @@ These are non-standard (not markdown compatible) but are more intuitive, in my o
 | underscore (_)       | underline            | "this is \_underlined\_" |this is <ins>underlined</ins> |
 
 
-You can use multiple characters at the same time:
+
+## Example Input
 ```
-"this is _/underlined and italicized/_"
+SimpleRichText(r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}underlined_, and /{color:brown}italicized/). _{push:home;color:blue}clickable hyperlink to home screen_')
 ```
 
-You can be sloppy!  Unlike HTML, for convenience, if using multiple characters the open and closed sequences, they _don't_ need to be in exact palindrome matching order:
+## Example Flutter Output
+![Screenshot](example.png)
 
-```
-"these are */equivalent/* and works without problems."
-"these are */equivalent*/ and works without problems."
-```
+ 
+
+
 
 
 
@@ -127,6 +111,21 @@ Change text color by passing color as attribute:
 ```
 
 
+# Notes
+
+You can use multiple characters at the same time:
+```
+"this is _/underlined and italicized/_"
+```
+
+You can be sloppy!  Unlike HTML, for convenience, if using multiple characters the open and closed sequences, they _don't_ need to be in exact palindrome matching order:
+
+```
+"these are */equivalent/* and works without problems."
+"these are */equivalent*/ and works without problems."
+```
+
+
 # Requirements
 Ancestor MUST have textDirection set (required by internal RichText widget), either through MaterialApp widget or explicitly wrapped by a Directionality widget:
 ```
@@ -134,6 +133,16 @@ Directionality(
     child: SimpleRichText('Peter', term: 't'),
     textDirection: TextDirection.ltr)
 ```
+
+
+
+# Improvements, Bugs, and Deficiencies
+
+- [ ] user-definable format characters
+- [ ] user-definable callback functions for custom formatting
+- [ ] support non-named navigation (only pushNamed, etc., supported at present)  
+
+
 
 
 # Pull Requests
