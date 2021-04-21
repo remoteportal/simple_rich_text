@@ -10,9 +10,9 @@ In comparison, [easy_rich_text](https://pub.dev/packages/easy_rich_text) require
 
 # Format Characters
 
-These are non-standard (not markdown compatible) but are more intuitive, in my opinion:
+These are non-standard (*not* markdown compatible) but are more intuitive, in my opinion:
 
-| format character      | format effect                | simple_rich_text example | Flutter output |
+| format character      | format effect                | simple_rich_text string input | Flutter output |
 |-----------|----------------------|----------------------|----------------------|
 | asterisk (*)       | bold            | "this is \*bold\*" | this is **bold** |
 | slash (/)       | italics            | "this is /italicized/" |this is *italicized* |
