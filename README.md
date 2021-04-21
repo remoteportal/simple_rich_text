@@ -12,7 +12,7 @@ In comparison, [easy_rich_text](https://pub.dev/packages/easy_rich_text) require
 
 These are non-standard (not markdown compatible) but are more intuitive, in my opinion:
 
-| character      | format effect                | simple_rich_text example | Flutter output |
+| format character      | format effect                | simple_rich_text example | Flutter output |
 |-----------|----------------------|----------------------|----------------------|
 | asterisk (*)       | bold            | "this is \*bold\*" | this is **bold** |
 | slash (/)       | italics            | "this is /italicized/" |this is *italicized* |
@@ -38,11 +38,11 @@ SimpleRichText(r'*_/this is all three*_/ (*{color:red}bold*, _{color:green}under
 
 Attribute pairs are placed in curly brackets immediately after first character marker.
 Each pair is separated by a semicolon (;) and can be in any order.
-Each pair has syntax name:value.
+Each pair has syntax *name:value*.
 
 
 
-| key      | meaning                | implemented navigation code |
+| key      | meaning                | implemented Dart code |
 |-----------|----------------------|----------------------|
 | color   | red, blue, etc           | textStyle.color: *color-value* |
 | pop       | pop the navigation stack            |  Navigator.pop(context);  |
