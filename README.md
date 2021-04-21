@@ -34,7 +34,7 @@ You can use multiple characters at the same time:
 "this is _/underlined and italicized/_.
 ```
 
-If using multiple characters the open and closed sequences /don't/ need to be in exact palindrome matching order:
+If using multiple characters the open and closed sequences _don't_ need to be in exact palindrome matching order:
 
 ```
 "these are */equivalent/*."

@@ -2,7 +2,7 @@ library simple_rich_text;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_navigation/simple_navigation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const Map<String, int> colorMap = {
   'aqua': 0x00FFFF,
@@ -27,7 +27,7 @@ const Map<String, int> colorMap = {
   'yellow': 0xFFFF00
 };
 
-Color parseColor(String? color) {
+Color parseColor(String color) {
 //  print("parseColor: $color");
   var v = colorMap[color];
   if (v == null) {
@@ -44,13 +44,17 @@ Color parseColor(String? color) {
 
 /// Widget that renders a string with sub-string highlighting.
 class SimpleRichText extends StatelessWidget {
-  SimpleRichText(this.text,
-      {this.chars,
-      this.context,
-      this.fussy,
-      this.log,
-      this.style,
-      this.textAlign});
+  SimpleRichText(
+    this.text, {
+    this.chars,
+    this.context,
+    this.fussy,
+    this.log = false,
+    this.style = const TextStyle(),
+    this.textAlign,
+    this.textOverflow,
+    this.maxLines,
+  });
 
   final String? chars;
 
@@ -61,7 +65,7 @@ class SimpleRichText extends StatelessWidget {
   final bool? fussy;
 
   /// Pass in true for debugging/logging/trace
-  final bool? log;
+  final bool log;
 
   /// The {TextStyle} of the {SimpleRichText.text} that isn't highlighted.
   final TextStyle? style;
@@ -69,11 +73,17 @@ class SimpleRichText extends StatelessWidget {
   /// The String to be displayed using rich text.
   final String text;
 
-  /// How the text should be aligned horizontally.
-  final TextAlign? textAlign;
-
   /// The {TextStyle} of the {SimpleRichText.term}s found.
 //  final TextStyle textStyleHighlight;
+
+  /// Text align
+  final TextAlign? textAlign;
+
+  /// Text Overflow
+  final TextOverflow? textOverflow;
+
+  /// Max lines
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -85,73 +95,115 @@ class SimpleRichText extends StatelessWidget {
 
       Set set = Set();
 
-      // split into array
-      List<String> spanList = text.split(RegExp(chars ?? r"[*~/_\\]"));
-      //print("len=${spanList.length}: $spanList");
-
-      if (spanList.length == 1) {
-        print('trivial');
-        if (style == null) {
-          return Text('');
-        } else {
-          return Text(text, style: style);
-        }
+      bool containsNewLine = text.contains(r'\n');
+      if (log) print('Contains new line: $containsNewLine');
+      List<String> linesList = [];
+      if (containsNewLine) {
+        linesList = text.split(r'\n');
+        if (log) print("lines=${linesList.length}: $linesList");
       } else {
-        int i = 0;
-        bool acceptNext = true;
-        String? cmd;
+        linesList.add(text);
+      }
+      // Apply modifications into all lines
+      for (int k = 0; k < linesList.length; k++) {
+        if (log) print('Line ${k + 1}: ${linesList[k]}');
+        // split into array
+        List<String> spanList =
+            linesList[k].split(RegExp(chars ?? r"[*~/_\\]"));
+        if (log) print("len=${spanList.length}: $spanList");
 
-        void wrap(String v) {
-          //print("wrap: $v set=$set");
-
-          Map<String, String> map = {};
-
-          if (cmd != null) {
-            var pairs = cmd.split(';');
-            for (var pair in pairs) {
-              var a = pair.split(':');
-              if (a.length == 2) {
-                map[a[0].trim()] = a[1].trim();
-              } else {
-                throw "attribute value is missing a value (e.g., you passed {key} but not {key:value}";
-              }
-            }
-            if (log ?? false) print("attributes: $map");
-          }
-
-          TextStyle ts;
+        if (spanList.length == 1) {
+          if (log) print("trivial");
           if (style == null) {
-            //TODO//H//TRAVESTY: needless duplicated code
-            ts = TextStyle(
-                color: map.containsKey('color')
-                    ? parseColor(map['color'])
-                    : DefaultTextStyle.of(context)
-                        .style
-                        .color, //WARNING: not sure if this is correct?
-                decoration: set.contains('_')
-                    ? TextDecoration.underline
-                    : TextDecoration.none,
-                fontStyle:
-                    set.contains('/') ? FontStyle.italic : FontStyle.normal,
-                fontWeight:
-                    set.contains('*') ? FontWeight.bold : FontWeight.normal);
+            children.add(TextSpan(text: ''));
+            // If no last line:
+            if (k < linesList.length - 1) children.add(TextSpan(text: '\n'));
           } else {
-            ts = style!.copyWith(
-                color: map.containsKey('color')
-                    ? parseColor(map['color'])
-                    : style!.color,
-                decoration: set.contains('_')
-                    ? TextDecoration.underline
-                    : TextDecoration.none,
-                fontStyle:
-                    set.contains('/') ? FontStyle.italic : FontStyle.normal,
-                fontWeight:
-                    set.contains('*') ? FontWeight.bold : FontWeight.normal);
+            children.add(TextSpan(text: linesList[k], style: style));
+            // If no last line:
+            if (k < linesList.length - 1) children.add(TextSpan(text: '\n'));
           }
+        } else {
+          int i = 0;
+          bool acceptNext = true;
+          String? cmd;
 
-          if (map.containsKey('pop') ||
-              map.containsKey('push') ||
-              map.containsKey('repl')) {
+          void wrap(String v) {
+            if (log) print("wrap: $v set=$set");
+
+            Map<String, String> map = {};
+
+            if (cmd != null) {
+              var pairs = cmd.split(';');
+              for (var pair in pairs) {
+                var a = pair.split(':');
+                if (a.length == 2) {
+                  map[a[0].trim()] = a[1].trim();
+                } else {
+                  throw "attribute value is missing a value (e.g., you passed {key} but not {key:value}";
+                }
+              }
+              if (log) print("attributes: $map");
+            }
+
+            // TextDecorationStyle "values" is ignored
+            TextDecorationStyle? _textDecorationStyle;
+            if (map.containsKey('decorationStyle')) {
+              if (map['decorationStyle'] == 'dashed')
+                _textDecorationStyle = TextDecorationStyle.dashed;
+              if (map['decorationStyle'] == 'double')
+                _textDecorationStyle = TextDecorationStyle.double;
+              if (map['decorationStyle'] == 'dotted')
+                _textDecorationStyle = TextDecorationStyle.dotted;
+              if (map['decorationStyle'] == 'solid')
+                _textDecorationStyle = TextDecorationStyle.solid;
+              if (map['decorationStyle'] == 'wavy')
+                _textDecorationStyle = TextDecorationStyle.wavy;
+            }
+
+            TextStyle ts;
+            ts = style!.copyWith(
+              color: map.containsKey('color')
+                  ? parseColor(map['color']!)
+                  : style!.color,
+              decoration: set.contains('_')
+                  ? TextDecoration.underline
+                  : TextDecoration.none,
+              fontStyle:
+                  set.contains('/') ? FontStyle.italic : FontStyle.normal,
+              fontWeight:
+                  set.contains('*') ? FontWeight.bold : FontWeight.normal,
+              fontSize: map.containsKey('fontSize')
+                  ? double.parse(map['fontSize']!)
+                  : style!.fontSize,
+              fontFamily: map.containsKey('fontFamily')
+                  ? '${map['fontFamily']}'
+                  : style!.fontFamily,
+              backgroundColor: map.containsKey('backgroundColor')
+                  ? parseColor(map['backgroundColor']!)
+                  : style!.backgroundColor,
+              decorationColor: map.containsKey('decorationColor')
+                  ? parseColor(map['decorationColor']!)
+                  : style!.decorationColor,
+              decorationStyle: _textDecorationStyle ?? style!.decorationStyle,
+              decorationThickness: map.containsKey('decorationThickness')
+                  ? double.parse(map['decorationThickness']!)
+                  : style!.decorationThickness,
+              height: map.containsKey('height')
+                  ? double.parse(map['height']!)
+                  : style!.height,
+              letterSpacing: map.containsKey('letterSpacing')
+                  ? double.parse(map['letterSpacing']!)
+                  : style!.letterSpacing,
+              wordSpacing: map.containsKey('wordSpacing')
+                  ? double.parse(map['wordSpacing']!)
+                  : style!.wordSpacing,
+            );
+
+            if (map.containsKey('pop') ||
+                map.containsKey('push') ||
+                map.containsKey('repl') ||
+                map.containsKey('http')) {
 //            print("BBB cmd=$cmd");
 //          GestureDetector
 //        children.add(WidgetSpan(child: Text('****')));
@@ -163,107 +215,130 @@ class SimpleRichText extends StatelessWidget {
 //            },
 //          )));
 
-            onTapNew(String caption, Map m) {
-              if (map.containsKey('push')) {
-                String? v = map['push'];
-                return () {
-                  if (log ?? false) print("TAP: PUSH: $caption => /$v");
-                  assert(v != null);
-//                  Navigator.pushNamed(context, '/$v');
-                  Nav.push('/$v');
-                };
-              } else if (map.containsKey('repl')) {
-                String? v = map['repl'];
-                return () {
-                  if (log ?? false) print("TAP: POP&PUSH: $caption => /$v");
-                  assert(v != null);
-//                  Navigator.popAndPushNamed(context, '/$v');
-                  Nav.repl('/$v');
-                };
-              } else {
-                return () {
-                  if (log ?? false) print("TAP: $caption => pop");
-//                  Navigator.pop(context);
-                  Nav.pop();
-                };
+              // assert(context != null, 'must pass context if using route links');
+
+              onTapNew(String caption, Map m) {
+                if (map.containsKey('push')) {
+                  String v = map['push']!;
+                  return () {
+                    if (log) print("TAP: PUSH: $caption => /$v");
+                    // assert(v != null);
+                    Navigator.pushNamed(context, '/$v');
+                    // Nav.push('/$v');
+                  };
+                } else if (map.containsKey('repl')) {
+                  String v = map['repl']!;
+                  return () {
+                    if (log) print("TAP: POP&PUSH: $caption => /$v");
+                    // assert(v != null);
+                    Navigator.popAndPushNamed(context, '/$v');
+                    //  Nav.repl('/$v');
+                  };
+                } else if (map.containsKey('http')) {
+                  String v = map['http']!;
+                  return () async {
+                    if (log) print("TAP: HTTP: $caption => /$v");
+                    // assert(v != null);
+                    try {
+                      await launch('http://$v');
+                    } catch (e) {
+                      if (log) print('Could not launch http://$v: $e');
+                      try {
+                        await launch('https://$v');
+                      } catch (e) {
+                        if (log) print('Could not launch https://$v: $e');
+                      }
+                    }
+                  }; // TODO add possibility of tel, mailto, sms, whats,...?
+                } else {
+                  return () {
+                    if (log) print("TAP: $caption => pop");
+                    Navigator.pop(context);
+                  };
+                }
               }
-            }
 
-            children.add(TextSpan(
-                text: v,
-                // Beware!  This class is only safe because the TapGestureRecognizer is not given a deadline and therefore never allocates any resources.
-                // In any other situation -- setting a deadline, using any of the less trivial recognizers, etc -- you would have to manage the gesture recognizer's lifetime
-                // and call dispose() when the TextSpan was no longer being rendered.
-                // Since TextSpan itself is @immutable, this means that you would have to manage the recognizer from outside
-                // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
-                recognizer: TapGestureRecognizer()..onTap = onTapNew(v, map),
-                style: ts));
-          } else {
-            children.add(TextSpan(text: v, style: ts));
-          }
-        }
-
-        void toggle(String m) {
-          if (m == r'\') {
-            String c = text.substring(i + 1, i + 2);
-            //print("quote: i=$i: $c");
-            wrap(c);
-            acceptNext = false;
-          } else {
-            if (acceptNext) {
-              if (set.contains(m)) {
-                //print("REM: $m");
-                set.remove(m);
-              } else {
-                //print("ADD: $m");
-                set.add(m);
-              }
-            }
-
-            acceptNext = true;
-          }
-        }
-
-        for (var v in spanList) {
-//          print("========== $v ==========");
-          cmd = null;
-          if (v.isEmpty) {
-            if (i < text.length) {
-              String m = text.substring(i, i + 1);
-//          //print("e: $m");
-              toggle(m);
-              i++;
-            }
-          } else {
-            int adv = v.length;
-            if (v[0] == '{') {
-              if (log ?? false) print("link: $v");
-              int close = v.indexOf('}');
-              if (close > 0) {
-                cmd = v.substring(1, close);
-                if (log ?? false) print("AAA cmd=$cmd");
-                v = v.substring(close + 1);
-//                print("remaining: $v");
-              }
-            }
-            wrap(v);
-            i += adv;
-            if (i < text.length) {
-              String m = text.substring(i, i + 1);
-              //print("*** format: $m");
-              toggle(m);
-              i++;
+              children.add(TextSpan(
+                  text: v,
+                  // Beware!  This class is only safe because the TapGestureRecognizer is not given a deadline and therefore never allocates any resources.
+                  // In any other situation -- setting a deadline, using any of the less trivial recognizers, etc -- you would have to manage the gesture recognizer's lifetime
+                  // and call dispose() when the TextSpan was no longer being rendered.
+                  // Since TextSpan itself is @immutable, this means that you would have to manage the recognizer from outside
+                  // the TextSpan, e.g. in the State of a stateful widget that then hands the recognizer to the TextSpan.
+                  recognizer: TapGestureRecognizer()..onTap = onTapNew(v, map),
+                  style: ts));
+            } else {
+              children.add(TextSpan(text: v, style: ts));
             }
           }
-        }
 
-        if ((fussy ?? false) && set.isNotEmpty) {
-          throw 'simple_rich_text: not closed: $set'; //TODO: throw real error?
-        }
+          void toggle(String m) {
+            if (m == r'\') {
+              String c = linesList[k].substring(i + 1, i + 2);
+              if (log) print("quote: i=$i: $c");
+              wrap(c);
+              acceptNext = false;
+            } else {
+              if (acceptNext) {
+                if (set.contains(m)) {
+                  if (log) print("REM: $m");
+                  set.remove(m);
+                } else {
+                  if (log) print("ADD: $m");
+                  set.add(m);
+                }
+              }
 
-        return Text.rich(TextSpan(children: children),
-            textAlign: this.textAlign);
+              acceptNext = true;
+            }
+          }
+
+          for (var v in spanList) {
+            if (log) print("========== $v ==========");
+            cmd = null; //TRY
+            if (v.isEmpty) {
+              if (i < linesList[k].length) {
+                String m = linesList[k].substring(i, i + 1);
+                toggle(m);
+                i++;
+              }
+            } else {
+              int adv = v.length;
+              if (v[0] == '{') {
+                if (log) print("link: $v");
+                int close = v.indexOf('}');
+                if (close > 0) {
+                  cmd = v.substring(1, close);
+                  if (log) print("AAA cmd=$cmd");
+                  v = v.substring(close + 1);
+                  if (log) print("remaining: $v");
+                }
+              }
+              wrap(v);
+              i += adv;
+              if (i < linesList[k].length) {
+                String m = linesList[k].substring(i, i + 1);
+                if (log) print("*** format: $m");
+                toggle(m);
+                i++;
+              }
+            }
+          }
+
+          if ((fussy ?? false) && set.isNotEmpty) {
+            throw 'simple_rich_text: not closed: $set'; //TODO: throw real error?
+          }
+
+          // If no last line:
+          if (k < linesList.length - 1) children.add(TextSpan(text: '\n'));
+        }
       }
+      return RichText(
+        text: TextSpan(children: children),
+        textAlign: this.textAlign ?? TextAlign.start,
+        overflow: this.textOverflow ?? TextOverflow.clip,
+        maxLines: this.maxLines ?? null,
+      );
     }
   }
 }

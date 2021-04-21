@@ -2,6 +2,14 @@
 
 
 
+## Version 2.0.37 (2021-04-21)
+
+- added new line option, some fontStyles, text overflow, max,etc  [pull request #3]
+- breaking change: the text parameter is no longer named--it's just the first parameter
+
+
+
+
 ## Version 2.0.36 (2021-04-21)
 
 - can now pass optional textAlign parameter to control how text should be aligned horizontally [issue #1]
