@@ -3,7 +3,7 @@
 
 
 
-## Version 2.0.44 (2021-04-22)
+## Version 2.0.45 (2021-04-22)
 
 - added textScaleFactor parameter \[[issue #6](https://github.com/remoteportal/simple_rich_text/issues/6)\]
 
