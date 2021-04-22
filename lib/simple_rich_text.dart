@@ -334,10 +334,11 @@ class SimpleRichText extends StatelessWidget {
         }
       }
       return RichText(
+        maxLines: this.maxLines ?? null,
+        overflow: this.textOverflow ?? TextOverflow.clip,
         text: TextSpan(children: children),
         textAlign: this.textAlign ?? TextAlign.start,
-        overflow: this.textOverflow ?? TextOverflow.clip,
-        maxLines: this.maxLines ?? null,
+        textScaleFactor: MediaQuery.of(context).textScaleFactor,
       );
     }
   }

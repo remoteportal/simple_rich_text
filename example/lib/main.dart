@@ -26,6 +26,15 @@ class MyApp extends StatelessWidget {
     String text =
         r'Now you can change the ~{fontSize:32}size~ of the text. \nInsert a new line.\nChange the ~{backgroundColor:yellow}background color~\nAnd modify more style as: fontFamily, _{decorationColor:blue}decorationColor_, ~{height:3}height~, etc\n\nToo you can open url: _{http:www.google.com;color:blue}go to Google_\nFinaly, you can define textAlign, maxLines and textOverflow';
     return new MaterialApp(
+      //set global text scale factor in builder
+      builder: (BuildContext context, Widget child) {
+        final MediaQueryData data = MediaQuery.of(context);
+        return MediaQuery(
+          data: data.copyWith(textScaleFactor: 1),
+          child: child,
+        );
+      },
+
       home: Scaffold(
         // , chars: r"[*]"
 //          backgroundColor: Colors.grey[300],
