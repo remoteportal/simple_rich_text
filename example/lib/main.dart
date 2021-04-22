@@ -39,13 +39,12 @@ class MyApp extends StatelessWidget {
         // , chars: r"[*]"
 //          backgroundColor: Colors.grey[300],
         body: Center(
-          child: SimpleRichText(
-            text,
-            style: TextStyle(color: Colors.orange),
-            maxLines: 20,
-            textAlign: TextAlign.center,
-            textOverflow: TextOverflow.ellipsis,
-          ),
+          child: SimpleRichText(text,
+              maxLines: 20,
+              style: TextStyle(color: Colors.orange),
+              textAlign: TextAlign.center,
+              textOverflow: TextOverflow.ellipsis,
+              textScaleFactor: 1.5),
         ),
       ),
     );

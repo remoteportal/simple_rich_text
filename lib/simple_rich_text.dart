@@ -44,17 +44,16 @@ Color parseColor(String color) {
 
 /// Widget that renders a string with sub-string highlighting.
 class SimpleRichText extends StatelessWidget {
-  SimpleRichText(
-    this.text, {
-    this.chars,
-    this.context,
-    this.fussy,
-    this.log = false,
-    this.style = const TextStyle(),
-    this.textAlign,
-    this.textOverflow,
-    this.maxLines,
-  });
+  SimpleRichText(this.text,
+      {this.chars,
+      this.context,
+      this.fussy,
+      this.log = false,
+      this.maxLines,
+      this.style = const TextStyle(),
+      this.textAlign,
+      this.textOverflow,
+      this.textScaleFactor});
 
   final String? chars;
 
@@ -67,23 +66,31 @@ class SimpleRichText extends StatelessWidget {
   /// Pass in true for debugging/logging/trace
   final bool log;
 
+  /// An optional maximum number of lines for the text to span, wrapping if necessary.
+  /// If the text exceeds the given number of lines, it will be truncated according
+  /// to [overflow].
+  ///
+  /// If this is 1, text will not wrap. Otherwise, text will be wrapped at the
+  /// edge of the box.
+  final int? maxLines;
+
   /// The {TextStyle} of the {SimpleRichText.text} that isn't highlighted.
   final TextStyle? style;
 
   /// The String to be displayed using rich text.
   final String text;
 
-  /// The {TextStyle} of the {SimpleRichText.term}s found.
-//  final TextStyle textStyleHighlight;
-
-  /// Text align
+  /// How the text should be aligned horizontally.
   final TextAlign? textAlign;
 
-  /// Text Overflow
+  /// How visual overflow should be handled.
   final TextOverflow? textOverflow;
 
-  /// Max lines
-  final int? maxLines;
+  /// The number of font pixels for each logical pixel.
+  ///
+  /// For example, if the text scale factor is 1.5, text will be 50% larger than
+  /// the specified font size.
+  final double? textScaleFactor;
 
   @override
   Widget build(BuildContext context) {
@@ -334,12 +341,12 @@ class SimpleRichText extends StatelessWidget {
         }
       }
       return RichText(
-        maxLines: this.maxLines ?? null,
-        overflow: this.textOverflow ?? TextOverflow.clip,
-        text: TextSpan(children: children),
-        textAlign: this.textAlign ?? TextAlign.start,
-        textScaleFactor: MediaQuery.of(context).textScaleFactor,
-      );
+          maxLines: this.maxLines ?? null,
+          overflow: this.textOverflow ?? TextOverflow.clip,
+          text: TextSpan(children: children),
+          textAlign: this.textAlign ?? TextAlign.start,
+          textScaleFactor:
+              this.textScaleFactor ?? MediaQuery.of(context).textScaleFactor);
     }
   }
 }
