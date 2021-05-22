@@ -40,7 +40,12 @@ class MyApp extends StatelessWidget {
 //          backgroundColor: Colors.grey[300],
         body: Center(
           child: SimpleRichText(text,
+              logIt: false,
               maxLines: 20,
+              pre:
+                  TextSpan(text: 'PRE', style: TextStyle(color: Colors.purple)),
+              post: TextSpan(
+                  text: 'POST', style: TextStyle(color: Colors.purple)),
               style: TextStyle(color: Colors.orange),
               textAlign: TextAlign.center,
               textOverflow: TextOverflow.ellipsis,

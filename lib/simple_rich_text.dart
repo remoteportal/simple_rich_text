@@ -48,8 +48,10 @@ class SimpleRichText extends StatelessWidget {
       {this.chars,
       this.context,
       this.fussy,
-      this.log = false,
+      this.logIt = false,
       this.maxLines,
+      this.pre,
+      this.post,
       this.style = const TextStyle(),
       this.textAlign,
       this.textOverflow,
@@ -64,7 +66,7 @@ class SimpleRichText extends StatelessWidget {
   final bool? fussy;
 
   /// Pass in true for debugging/logging/trace
-  final bool log;
+  final bool logIt;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -73,6 +75,12 @@ class SimpleRichText extends StatelessWidget {
   /// If this is 1, text will not wrap. Otherwise, text will be wrapped at the
   /// edge of the box.
   final int? maxLines;
+
+  /// optional leading TextSpan
+  final TextSpan? pre;
+
+  /// optional trailing TextSpan
+  final TextSpan? post;
 
   /// The {TextStyle} of the {SimpleRichText.text} that isn't highlighted.
   final TextStyle? style;
@@ -100,27 +108,32 @@ class SimpleRichText extends StatelessWidget {
       //print('text: $text');
       List<InlineSpan> children = [];
 
+      if (pre != null) {
+        children.add(pre!);
+      }
+
       Set set = Set();
 
       bool containsNewLine = text.contains(r'\n');
-      if (log) print('Contains new line: $containsNewLine');
+      log('Contains new line: $containsNewLine');
       List<String> linesList = [];
       if (containsNewLine) {
         linesList = text.split(r'\n');
-        if (log) print("lines=${linesList.length}: $linesList");
+        log("lines=${linesList.length}: $linesList");
       } else {
         linesList.add(text);
       }
+
       // Apply modifications into all lines
       for (int k = 0; k < linesList.length; k++) {
-        if (log) print('Line ${k + 1}: ${linesList[k]}');
+        log('Line ${k + 1}: ${linesList[k]}');
         // split into array
         List<String> spanList =
             linesList[k].split(RegExp(chars ?? r"[*~/_\\]"));
-        if (log) print("len=${spanList.length}: $spanList");
+        log("len=${spanList.length}: $spanList");
 
         if (spanList.length == 1) {
-          if (log) print("trivial");
+          log("trivial");
           if (style == null) {
             children.add(TextSpan(text: ''));
             // If no last line:
@@ -136,7 +149,7 @@ class SimpleRichText extends StatelessWidget {
           String? cmd;
 
           void wrap(String v) {
-            if (log) print("wrap: $v set=$set");
+            log("wrap: $v set=$set");
 
             Map<String, String> map = {};
 
@@ -150,7 +163,7 @@ class SimpleRichText extends StatelessWidget {
                   throw "attribute value is missing a value (e.g., you passed {key} but not {key:value}";
                 }
               }
-              if (log) print("attributes: $map");
+              log("attributes: $map");
             }
 
             // TextDecorationStyle "values" is ignored
@@ -228,7 +241,7 @@ class SimpleRichText extends StatelessWidget {
                 if (map.containsKey('push')) {
                   String v = map['push']!;
                   return () {
-                    if (log) print("TAP: PUSH: $caption => /$v");
+                    log("TAP: PUSH: $caption => /$v");
                     // assert(v != null);
                     Navigator.pushNamed(context, '/$v');
                     // Nav.push('/$v');
@@ -236,7 +249,7 @@ class SimpleRichText extends StatelessWidget {
                 } else if (map.containsKey('repl')) {
                   String v = map['repl']!;
                   return () {
-                    if (log) print("TAP: POP&PUSH: $caption => /$v");
+                    log("TAP: POP&PUSH: $caption => /$v");
                     // assert(v != null);
                     Navigator.popAndPushNamed(context, '/$v');
                     //  Nav.repl('/$v');
@@ -244,22 +257,22 @@ class SimpleRichText extends StatelessWidget {
                 } else if (map.containsKey('http')) {
                   String v = map['http']!;
                   return () async {
-                    if (log) print("TAP: HTTP: $caption => /$v");
+                    log("TAP: HTTP: $caption => /$v");
                     // assert(v != null);
                     try {
                       await launch('http://$v');
                     } catch (e) {
-                      if (log) print('Could not launch http://$v: $e');
+                      log('Could not launch http://$v: $e');
                       try {
                         await launch('https://$v');
                       } catch (e) {
-                        if (log) print('Could not launch https://$v: $e');
+                        log('Could not launch https://$v: $e');
                       }
                     }
                   }; // TODO add possibility of tel, mailto, sms, whats,...?
                 } else {
                   return () {
-                    if (log) print("TAP: $caption => pop");
+                    log("TAP: $caption => pop");
                     Navigator.pop(context);
                   };
                 }
@@ -282,16 +295,16 @@ class SimpleRichText extends StatelessWidget {
           void toggle(String m) {
             if (m == r'\') {
               String c = linesList[k].substring(i + 1, i + 2);
-              if (log) print("quote: i=$i: $c");
+              log("quote: i=$i: $c");
               wrap(c);
               acceptNext = false;
             } else {
               if (acceptNext) {
                 if (set.contains(m)) {
-                  if (log) print("REM: $m");
+                  log("REM: $m");
                   set.remove(m);
                 } else {
-                  if (log) print("ADD: $m");
+                  log("ADD: $m");
                   set.add(m);
                 }
               }
@@ -301,7 +314,7 @@ class SimpleRichText extends StatelessWidget {
           }
 
           for (var v in spanList) {
-            if (log) print("========== $v ==========");
+            log("========== $v ==========");
             cmd = null; //TRY
             if (v.isEmpty) {
               if (i < linesList[k].length) {
@@ -312,20 +325,20 @@ class SimpleRichText extends StatelessWidget {
             } else {
               int adv = v.length;
               if (v[0] == '{') {
-                if (log) print("link: $v");
+                log("link: $v");
                 int close = v.indexOf('}');
                 if (close > 0) {
                   cmd = v.substring(1, close);
-                  if (log) print("AAA cmd=$cmd");
+                  log("AAA cmd=$cmd");
                   v = v.substring(close + 1);
-                  if (log) print("remaining: $v");
+                  log("remaining: $v");
                 }
               }
               wrap(v);
               i += adv;
               if (i < linesList[k].length) {
                 String m = linesList[k].substring(i, i + 1);
-                if (log) print("*** format: $m");
+                log("*** format: $m");
                 toggle(m);
                 i++;
               }
@@ -340,6 +353,11 @@ class SimpleRichText extends StatelessWidget {
           if (k < linesList.length - 1) children.add(TextSpan(text: '\n'));
         }
       }
+
+      if (post != null) {
+        children.add(post!);
+      }
+
       return RichText(
           maxLines: this.maxLines ?? null,
           overflow: this.textOverflow ?? TextOverflow.clip,
@@ -347,6 +365,10 @@ class SimpleRichText extends StatelessWidget {
           textAlign: this.textAlign ?? TextAlign.start,
           textScaleFactor:
               this.textScaleFactor ?? MediaQuery.of(context).textScaleFactor);
-    }
+    } // else
+  } // build
+
+  void log(String s) {
+    if (logIt) print('---- $s');
   }
-}
+} // class
