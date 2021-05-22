@@ -2,7 +2,7 @@
 
 
 
-## Version 2.0.47 (2021-05-22)
+## Version 2.0.49 (2021-05-22)
 
 - added pre and post parameters to optionally add leading and trailing TextSpan()s to the RichText composite output \[[issue #7](https://github.com/remoteportal/simple_rich_text/issues/7)\]
 
