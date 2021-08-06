@@ -77,10 +77,10 @@ class SimpleRichText extends StatelessWidget {
   final int? maxLines;
 
   /// optional leading TextSpan
-  final TextSpan? pre;
+  final List<TextSpan>? pre;
 
   /// optional trailing TextSpan
-  final TextSpan? post;
+  final List<TextSpan>? post;
 
   /// The {TextStyle} of the {SimpleRichText.text} that isn't highlighted.
   final TextStyle? style;
@@ -109,7 +109,7 @@ class SimpleRichText extends StatelessWidget {
       List<InlineSpan> children = [];
 
       if (pre != null) {
-        children.add(pre!);
+        children.addAll(pre!);
       }
 
       Set set = Set();
@@ -355,7 +355,7 @@ class SimpleRichText extends StatelessWidget {
       }
 
       if (post != null) {
-        children.add(post!);
+        children.addAll(post!);
       }
 
       return RichText(
