@@ -27,18 +27,22 @@ const Map<String, int> colorMap = {
   'yellow': 0xFFFF00
 };
 
-Color parseColor(String color) {
-//  print("parseColor: $color");
-  var v = colorMap[color];
-  if (v == null) {
-    return Colors.red;
-  } else {
-//    return Color(v);
-//    return Colors.green;
-//    int n = Color(v);
-    Color out = Color((0xff << 24) | v);
-//    print("parseColor: $color => $out");
-    return out;
+Color? parseColor(String? color) {
+  if (color == null || color.isEmpty) {
+    return null;
+  }
+  if (colorMap.containsKey(color)) {
+    return Color((0xff << 24) | colorMap[color]!);
+  }
+  // custom color !
+  String hexColor = color.replaceAll("#", "");
+  if (hexColor.length == 6) {
+    hexColor = "FF" + hexColor;
+  }
+  try {
+    return Color(int.parse("0x$hexColor"));
+  } catch (e) {
+    return null;
   }
 }
 
@@ -129,7 +133,7 @@ class SimpleRichText extends StatelessWidget {
         log('Line ${k + 1}: ${linesList[k]}');
         // split into array
         List<String> spanList =
-            linesList[k].split(RegExp(chars ?? r"[*~/_\\]"));
+            linesList[k].split(RegExp(chars ?? r"(?=(?![^{]*}))[*~/_\\]"));
         log("len=${spanList.length}: $spanList");
 
         if (spanList.length == 1) {
@@ -183,9 +187,7 @@ class SimpleRichText extends StatelessWidget {
 
             TextStyle ts;
             ts = style!.copyWith(
-              color: map.containsKey('color')
-                  ? parseColor(map['color']!)
-                  : style!.color,
+              color: parseColor(map['color']) ?? style!.color,
               decoration: set.contains('_')
                   ? TextDecoration.underline
                   : TextDecoration.none,
@@ -199,12 +201,10 @@ class SimpleRichText extends StatelessWidget {
               fontFamily: map.containsKey('fontFamily')
                   ? '${map['fontFamily']}'
                   : style!.fontFamily,
-              backgroundColor: map.containsKey('backgroundColor')
-                  ? parseColor(map['backgroundColor']!)
-                  : style!.backgroundColor,
-              decorationColor: map.containsKey('decorationColor')
-                  ? parseColor(map['decorationColor']!)
-                  : style!.decorationColor,
+              backgroundColor:
+                  parseColor(map['backgroundColor']) ?? style!.backgroundColor,
+              decorationColor:
+                  parseColor(map['decorationColor']) ?? style!.decorationColor,
               decorationStyle: _textDecorationStyle ?? style!.decorationStyle,
               decorationThickness: map.containsKey('decorationThickness')
                   ? double.parse(map['decorationThickness']!)
